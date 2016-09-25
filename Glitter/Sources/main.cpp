@@ -10,11 +10,14 @@
 #include <cstdlib>
 
 #include "models.hpp"
+#include "util.hpp"
 
 void render(GameState state) {
     // Background Fill Color
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glDrawArrays(GL_POINTS, 0, 1);
 
     // Flip Buffers and Draw
     glfwSwapBuffers(state.window);
@@ -36,7 +39,29 @@ void gameLoop(GLFWwindow * window) {
     double currentTime = glfwGetTime();
     double accumulator = 0.0;
 
-    GameState state = { window };
+    GameState state = { 
+        window, createShaderProgram(shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"))
+    };
+
+    glUseProgram(state.playerShaderProgram);
+
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+
+    float points[] = { 0.0f,  0.0f };
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+
+    // Create VAO
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Specify layout of point data
+    GLint posAttrib = glGetAttribLocation(state.playerShaderProgram, "pos");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     while (!glfwWindowShouldClose(window)) {
         double newTime = glfwGetTime();

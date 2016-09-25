@@ -3,4 +3,5 @@
 
 typedef struct {
     GLFWwindow * window;
+    GLuint playerShaderProgram;
 } GameState;
