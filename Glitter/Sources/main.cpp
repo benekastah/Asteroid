@@ -9,6 +9,54 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "models.hpp"
+
+void render(GameState state) {
+    // Background Fill Color
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Flip Buffers and Draw
+    glfwSwapBuffers(state.window);
+    glfwPollEvents();
+}
+
+void updateState(GameState * state, double t, double dt) {
+    if (glfwGetKey(state->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(state->window, true);
+    }
+}
+
+// http://gafferongames.com/game-physics/fix-your-timestep/
+void gameLoop(GLFWwindow * window) {
+    double t = 0.0;
+    double dt = 0.01;
+    double maxFrameTime = 0.25;
+
+    double currentTime = glfwGetTime();
+    double accumulator = 0.0;
+
+    GameState state = { window };
+
+    while (!glfwWindowShouldClose(window)) {
+        double newTime = glfwGetTime();
+        double frameTime = newTime - currentTime;
+        if (frameTime > maxFrameTime) {
+            frameTime = maxFrameTime;
+        }
+        currentTime = newTime;
+        accumulator += frameTime;
+
+        while (accumulator >= dt) {
+            updateState(&state, t, dt);
+            t += dt;
+            accumulator -= dt;
+        }
+
+        render(state);
+    }
+}
+
 int main(int argc, char * argv[]) {
 
     // Load GLFW and Create a Window
@@ -31,18 +79,8 @@ int main(int argc, char * argv[]) {
     gladLoadGL();
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-    // Rendering Loop
-    while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(mWindow, true);
+    gameLoop(mWindow);
 
-        // Background Fill Color
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Flip Buffers and Draw
-        glfwSwapBuffers(mWindow);
-        glfwPollEvents();
-    }   glfwTerminate();
+    glfwTerminate();
     return EXIT_SUCCESS;
 }
