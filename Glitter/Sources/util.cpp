@@ -111,6 +111,7 @@ GLuint _createShaderProgram(const char * name, ...) {
         }
         if (shader != 0) {
             glAttachShader(shaderProgram, shader);
+            // glDeleteShader(shader);
         }
         name = va_arg(args, char *);
     }

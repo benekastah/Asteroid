@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <cstdarg>
 
+#define PI 3.141592653589793
+
 char* readFile(const char* fname);
 
 float scale(float min1, float max1, float min2, float max2, float val);
