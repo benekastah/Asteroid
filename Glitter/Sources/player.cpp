@@ -11,9 +11,10 @@ Asteroid::Player::Player() {
     mass = 5000;
     force = glm::vec2(0, 0);
     velocity = glm::vec2(0, 0);
-    pos = glm::vec2(75, 75);
+    pos = glm::vec2(50, 50);
     direction = glGetUniformLocation(shaderProgram, "direction");
     sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
+    projectileActive = false;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -60,18 +61,33 @@ void Asteroid::Player::step(GameState state, double t, double dt) {
     force.x = minf(maxForce, maxf(-maxForce, force.x));
     force.y = minf(maxForce, maxf(-maxForce, force.y));
 
-    glm::vec2 acc;
-    acc.x = force.x / mass;
-    acc.y = force.y / mass;
-    pos.x += velocity.x * dt + 0.5 * acc.x * powf(dt, 2);
-    pos.y += velocity.y * dt + 0.5 * acc.y * powf(dt, 2);
-    velocity.x += acc.x * dt;
-    velocity.y += acc.y * dt;
+    applyForce(force, dt, mass, &velocity, &pos);
+    const float maxVelocity = 100;
+    if (velocity.x < -maxVelocity) { velocity.x = -maxVelocity; }
+    if (velocity.x > maxVelocity) { velocity.x = maxVelocity; }
+    if (velocity.y < -maxVelocity) { velocity.y = -maxVelocity; }
+    if (velocity.y > maxVelocity) { velocity.y = maxVelocity; }
 
     auto world = World::getInstance();
     pos = world.wrapWorldCoord(pos);
 
-    glUniform1f(direction, atan2f(velocity.x, velocity.y));
+    float dir = atan2f(velocity.y, velocity.x);
+    glUniform1f(direction, dir);
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && t - projectileFiredAt > projectileTimeToLive) {
+        float speed = sqrtf(powf(velocity.x, 2) + powf(velocity.y, 2));
+        printf("Velocity: %f, %f, ", velocity.x, velocity.y);
+        printf("Speed: %f\n", speed);
+        projectile = new Projectile(dir, speed + 50, pos);
+        projectileFiredAt = t;
+        projectileActive = true;
+    }
+
+    if (projectileActive && t - projectileFiredAt <= projectileTimeToLive) {
+        projectile->step(state, t, dt);
+    } else if (projectileActive) {
+        projectileActive = false;
+    }
 }
 
 void Asteroid::Player::draw(Asteroid::GameState state) {
@@ -102,6 +118,10 @@ void Asteroid::Player::draw(Asteroid::GameState state) {
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(playerPos), &playerPos, GL_STREAM_DRAW);
     glDrawArrays(GL_POINTS, 0, 9);
+
+    if (projectileActive) {
+        projectile->draw(state);
+    }
 }
 
 void Asteroid::Player::onWorldChange(World world) {

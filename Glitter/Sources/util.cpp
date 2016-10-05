@@ -1,8 +1,13 @@
 #include "glitter.hpp"
 
 #include <GLFW/glfw3.h>
+#include <math.h>
+
+#include <glm/vec2.hpp>
 
 #include "util.hpp"
+
+#define MAX_NUM_SHADERS 100
 
 char* readFile(const char* fname) {
     char* buffer = NULL;
@@ -89,6 +94,29 @@ GLuint createShader(GLenum type, const char * fname) {
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, (const GLchar **)&src, nullptr);
     glCompileShader(shader);
+
+    GLint isCompiled = 0;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+    if (isCompiled == GL_FALSE) {
+        GLint maxLength = 0;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+        //The maxLength includes the NULL character
+        std::vector<GLchar> infoLog(maxLength);
+        glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+        //We don't need the shader anymore.
+        glDeleteShader(shader);
+
+        for (int i = 0; i < maxLength; i++) {
+            putchar(infoLog[i]);
+        }
+        putchar('\n');
+        getchar();
+
+        exit(1);
+    }
+
     free(src);
     return shader;
 }
@@ -119,5 +147,46 @@ GLuint _createShaderProgram(const char * name, ...) {
     va_end(args);
 
     glLinkProgram(shaderProgram);
+
+    GLint isLinked = 0;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, (int *) &isLinked);
+    if (isLinked == GL_FALSE) {
+        GLint maxLength = 0;
+        glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &maxLength);
+
+        //The maxLength includes the NULL character
+        std::vector<GLchar> infoLog(maxLength);
+        glGetProgramInfoLog(shaderProgram, maxLength, &maxLength, &infoLog[0]);
+
+        deleteShaderProgram(shaderProgram);
+
+        for (int i = 0; i < maxLength; i++) {
+            putchar(infoLog[i]);
+        }
+        putchar('\n');
+        getchar();
+
+        exit(1);
+    }
     return shaderProgram;
+}
+
+void deleteShaderProgram(GLuint shaderProgram) {
+    GLsizei count;
+    GLuint shaders[MAX_NUM_SHADERS];
+    glGetAttachedShaders(shaderProgram, MAX_NUM_SHADERS, &count, &shaders[0]);
+    for (int i = 0; i < count; i++) {
+        glDeleteShader(shaders[i]);
+    }
+    glDeleteProgram(shaderProgram);
+}
+
+void applyForce(glm::vec2 force, double t, float mass, glm::vec2 * velocity, glm::vec2 * pos) {
+    glm::vec2 acc;
+    acc.x = force.x / mass;
+    acc.y = force.y / mass;
+    pos->x += velocity->x * t + 0.5 * acc.x * powf(t, 2);
+    pos->y += velocity->y * t + 0.5 * acc.y * powf(t, 2);
+    velocity->x += acc.x * t;
+    velocity->y += acc.y * t;
 }

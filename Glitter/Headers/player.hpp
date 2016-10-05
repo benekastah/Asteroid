@@ -7,6 +7,7 @@
 #include "util.hpp"
 #include "renderable.hpp"
 #include "world.hpp"
+#include "projectile.hpp"
 
 namespace Asteroid {
     class Player : Renderable {
@@ -27,6 +28,10 @@ namespace Asteroid {
     private:
         GLint direction, sizeRatio;
         GLuint vao, vbo;
+        bool projectileActive;
+        double projectileFiredAt = 0;
+        double projectileTimeToLive = 1.2;
+        Projectile * projectile;
 
         void onWorldChange(World world);
     };
