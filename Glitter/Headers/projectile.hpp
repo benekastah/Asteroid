@@ -11,13 +11,9 @@
 namespace Asteroid {
     class Projectile : Renderable {
     public:
-        GLuint shaderProgram;
-        float speed;
-        float angle;
-        glm::vec2 pos;
+        float startTime;
 
-        Projectile(float pAngle, float pSpeed, glm::vec2 pPos);
-        ~Projectile();
+        void initialize(float pAngle, float pSpeed, glm::vec2 pPos);
 
         void step(GameState state, double t, double dt);
         void draw(GameState state);
@@ -25,6 +21,11 @@ namespace Asteroid {
         void onWorldChange(World world);
 
     private:
+        GLuint shaderProgram;
+        float speed;
+        float angle;
+        glm::vec2 pos;
+
         GLuint vao, vbo;
         GLuint sizeRatio;
     };

@@ -14,7 +14,6 @@ Asteroid::Player::Player() {
     pos = glm::vec2(50, 50);
     direction = glGetUniformLocation(shaderProgram, "direction");
     sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
-    projectileActive = false;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -29,6 +28,8 @@ Asteroid::Player::Player() {
 
     onWorldChange(World::getInstance());
     World::getInstance().addChangeCallback(std::bind(&Asteroid::Player::onWorldChange, this, std::placeholders::_1));
+
+    gun.initialize(5, 1.2, 3, 0.5);
 }
 
 Asteroid::Player::~Player() {
@@ -74,20 +75,12 @@ void Asteroid::Player::step(GameState state, double t, double dt) {
     float dir = atan2f(velocity.y, velocity.x);
     glUniform1f(direction, dir);
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && t - projectileFiredAt > projectileTimeToLive) {
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         float speed = sqrtf(powf(velocity.x, 2) + powf(velocity.y, 2));
-        printf("Velocity: %f, %f, ", velocity.x, velocity.y);
-        printf("Speed: %f\n", speed);
-        projectile = new Projectile(dir, speed + 50, pos);
-        projectileFiredAt = t;
-        projectileActive = true;
+        gun.fireBullet(t, dir, speed + 50, pos);
     }
 
-    if (projectileActive && t - projectileFiredAt <= projectileTimeToLive) {
-        projectile->step(state, t, dt);
-    } else if (projectileActive) {
-        projectileActive = false;
-    }
+    gun.step(state, t, dt);
 }
 
 void Asteroid::Player::draw(Asteroid::GameState state) {
@@ -119,9 +112,7 @@ void Asteroid::Player::draw(Asteroid::GameState state) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(playerPos), &playerPos, GL_STREAM_DRAW);
     glDrawArrays(GL_POINTS, 0, 9);
 
-    if (projectileActive) {
-        projectile->draw(state);
-    }
+    gun.draw(state);
 }
 
 void Asteroid::Player::onWorldChange(World world) {

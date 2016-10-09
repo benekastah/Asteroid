@@ -7,7 +7,7 @@ layout(triangle_strip, max_vertices = 33) out;
 const float PI = 3.1415926;
 
 void main() {
-    float r = 0.007;
+    float r = 0.004;
     for (int i = 0; i <= 10; i++) {
         float a = PI * 2.0 / 10.0 * i;
         float a2 = PI * 2.0 / 10.0 * (i + 1);

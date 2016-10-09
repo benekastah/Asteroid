@@ -3,13 +3,21 @@
 #include "game_state.hpp"
 #include "util.hpp"
 
-Asteroid::Projectile::Projectile(float pAngle, float pSpeed, glm::vec2 pPos) {
-    shaderProgram = createShaderProgram(
-        shaderFile("projectile.vert"), shaderFile("projectile.geo"), shaderFile("projectile.frag"));
+static GLuint projectileShader;
+static bool shaderInitialized = false;
+
+void Asteroid::Projectile::initialize(float pAngle, float pSpeed, glm::vec2 pPos) {
+    if (!shaderInitialized) {
+        projectileShader = createShaderProgram(
+            shaderFile("projectile.vert"), shaderFile("projectile.geo"), shaderFile("projectile.frag"));
+        shaderInitialized = true;
+    }
+    shaderProgram = projectileShader;
     speed = pSpeed;
     angle = pAngle;
     pos = pPos;
     sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
+    startTime = 0;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -26,11 +34,10 @@ Asteroid::Projectile::Projectile(float pAngle, float pSpeed, glm::vec2 pPos) {
     World::getInstance().addChangeCallback(std::bind(&Asteroid::Projectile::onWorldChange, this, std::placeholders::_1));
 }
 
-Asteroid::Projectile::~Projectile() {
-    glDeleteProgram(shaderProgram);
-}
-
 void Asteroid::Projectile::step(GameState state, double t, double dt) {
+    if (startTime == 0) {
+        startTime = t;
+    }
     float frameSpeed = speed * dt;
     pos.x += frameSpeed * cosf(angle);
     pos.y += frameSpeed * sinf(angle);
