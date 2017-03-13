@@ -22,8 +22,7 @@ namespace Asteroid {
         ~Player();
 
         void step(GameState state, double t, double dt);
-
-        void draw(Asteroid::GameState state);
+        void draw(GameState state);
 
     private:
         GLint direction, sizeRatio;

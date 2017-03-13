@@ -12,7 +12,7 @@ namespace Asteroid {
 
     class Renderable {
     public:
-        virtual void Asteroid::Renderable::step(GameState state, double t, double dt) = 0;
-        virtual void Asteroid::Renderable::draw(GameState state) = 0;
+        virtual void Renderable::step(GameState state, double t, double dt) = 0;
+        virtual void Renderable::draw(GameState state) = 0;
     };
 }
