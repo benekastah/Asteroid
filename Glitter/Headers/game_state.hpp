@@ -5,6 +5,7 @@
 
 #include "player.hpp"
 #include "sidebar.hpp"
+#include "asteroid.hpp"
 
 namespace Asteroid {
     class GameState {
@@ -12,6 +13,7 @@ namespace Asteroid {
         GLFWwindow * window;
         Player * player;
         Sidebar * sidebar;
+		std::vector<Asteroid *> asteroids;
 
         GameState(GLFWwindow * window);
         ~GameState();

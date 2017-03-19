@@ -8,15 +8,15 @@
 #include "renderable.hpp"
 #include "world.hpp"
 #include "gun.hpp"
+#include "rigidbody.hpp"
 
 namespace Asteroid {
+	class GameState;
+
     class Player : Renderable {
     public:
         GLuint shaderProgram;
-        float mass;
-        glm::vec2 force;
-        glm::vec2 velocity;
-        glm::vec2 pos;
+		Rigidbody rb;
 
         Player();
         ~Player();

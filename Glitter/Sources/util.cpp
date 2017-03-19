@@ -12,8 +12,13 @@
 char* readFile(const char* fname) {
     char* buffer = NULL;
     long length;
+
     FILE* f;
     errno_t err = fopen_s(&f, fname, "rb");
+	if (err != 0) {
+		fprintf(stderr, "Error reading file \"%s\"\n", fname);
+		exit(1);
+	}
 
     if (f) {
         fseek(f, 0, SEEK_END);
@@ -179,14 +184,4 @@ void deleteShaderProgram(GLuint shaderProgram) {
         glDeleteShader(shaders[i]);
     }
     glDeleteProgram(shaderProgram);
-}
-
-void applyForce(glm::vec2 force, double t, float mass, glm::vec2 * velocity, glm::vec2 * pos) {
-    glm::vec2 acc;
-    acc.x = force.x / mass;
-    acc.y = force.y / mass;
-    pos->x += velocity->x * t + 0.5 * acc.x * powf(t, 2);
-    pos->y += velocity->y * t + 0.5 * acc.y * powf(t, 2);
-    velocity->x += acc.x * t;
-    velocity->y += acc.y * t;
 }

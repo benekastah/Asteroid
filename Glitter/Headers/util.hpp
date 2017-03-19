@@ -22,5 +22,3 @@ GLuint createShader(GLenum type, const char * fname);
 #define createShaderProgram(...) (_createShaderProgram(__VA_ARGS__, nullptr))
 GLuint _createShaderProgram(const char * name, ...);
 void deleteShaderProgram(GLuint shaderProgram);
-
-void applyForce(glm::vec2 force, double t, float mass, glm::vec2 * velocity, glm::vec2 * pos);

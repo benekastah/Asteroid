@@ -20,6 +20,9 @@ void render(GameState state) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     state.player->draw(state);
+	for each (auto asteroid in state.asteroids) {
+		asteroid->draw(state);
+	}
     state.sidebar->draw(state);
 
     // Flip Buffers and Draw
@@ -32,6 +35,9 @@ void updateState(GameState * state, double t, double dt) {
         glfwSetWindowShouldClose(state->window, true);
     }
     state->player->step(*state, t, dt);
+	for each (auto asteroid in state->asteroids) {
+		asteroid->step(*state, t, dt);
+	}
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
