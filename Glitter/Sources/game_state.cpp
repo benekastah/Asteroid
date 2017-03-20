@@ -8,8 +8,8 @@ namespace Asteroid {
 		for (int i = 0; i < 5; i++) {
 			auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX), World::getInstance().randPos());
 			asteroid->rb.applyForce(glm::vec2(
-				randfBtwn(asteroid->rb.mass * -1500, asteroid->rb.mass * 1500),
-				randfBtwn(asteroid->rb.mass * -1500, asteroid->rb.mass * 1500)));
+				randfBtwn(asteroid->rb.mass * -2000, asteroid->rb.mass * 2000),
+				randfBtwn(asteroid->rb.mass * -2000, asteroid->rb.mass * 2000)));
 			asteroids.push_back(asteroid);
 		}
     }

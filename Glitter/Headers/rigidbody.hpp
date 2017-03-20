@@ -2,10 +2,12 @@
 
 #include "glm/vec2.hpp"
 
+#include "game_object.hpp"
+
 namespace Asteroid {
 	class GameState;
 
-	class Rigidbody {
+	class Rigidbody : GameObject {
 	public:
 		Rigidbody();
 		Rigidbody(float mMass, float mMaxVelocity, glm::vec2 mVelocity, glm::vec2 mPos);

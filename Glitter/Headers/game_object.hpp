@@ -5,14 +5,13 @@
 #include "glm/vec2.hpp"
 
 #include "util.hpp"
-#include "game_object.hpp"
 
 
 namespace Asteroid {
     class GameState;
 
-    class Renderable : GameObject {
+    class GameObject {
     public:
-        virtual void Renderable::draw(GameState state) = 0;
+        virtual void GameObject::step(GameState state, double t, double dt) = 0;
     };
 }
