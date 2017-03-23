@@ -22,7 +22,25 @@ namespace Asteroid {
 		acc.y = force.y / mass;
 	}
 
+	void Rigidbody::applyVelocity(glm::vec2 vel) {
+		nextVelocity.first = true;
+		nextVelocity.second = vel;
+	}
+
+	void Rigidbody::applyPos(glm::vec2 mPos) {
+		nextPos.first = true;
+		nextPos.second = mPos;
+	}
+
 	void Rigidbody::step(GameState state, double t, double dt) {
+		if (nextVelocity.first) {
+			nextVelocity.first = false;
+			velocity = nextVelocity.second;
+		}
+		if (nextPos.first) {
+			nextPos.first = false;
+			pos = nextPos.second;
+		}
 		pos.x += velocity.x * dt + 0.5 * acc.x * powf(dt, 2);
 		pos.y += velocity.y * dt + 0.5 * acc.y * powf(dt, 2);
 		pos = World::getInstance().wrapWorldCoord(pos);

@@ -14,6 +14,8 @@ namespace Asteroid {
 		Rigidbody(float mMass, glm::vec2 mPos);
 
 		void applyForce(glm::vec2 force);
+		void applyVelocity(glm::vec2 vel);
+		void applyPos(glm::vec2 pos);
 		void step(GameState state, double t, double dt);
 
         float mass;
@@ -25,5 +27,7 @@ namespace Asteroid {
 		void initialize(float mMass, float mMaxVelocity, glm::vec2 mVelocity, glm::vec2 mPos);
 
 		glm::vec2 acc;
+		std::pair<bool, glm::vec2> nextVelocity;
+		std::pair<bool, glm::vec2> nextPos;
 	};
 }

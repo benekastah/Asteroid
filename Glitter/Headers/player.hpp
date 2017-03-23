@@ -9,6 +9,7 @@
 #include "world.hpp"
 #include "gun.hpp"
 #include "rigidbody.hpp"
+#include "collider.hpp"
 
 namespace Asteroid {
 	class GameState;
@@ -17,6 +18,7 @@ namespace Asteroid {
     public:
         GLuint shaderProgram;
 		Rigidbody rb;
+		Collider * coll;
 
         Player();
         ~Player();
@@ -25,7 +27,7 @@ namespace Asteroid {
         void draw(GameState state);
 
     private:
-        GLint direction, sizeRatio;
+        GLint direction, radius, sizeRatio;
         GLuint vao, vbo;
         Gun gun;
 

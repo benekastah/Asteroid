@@ -10,7 +10,7 @@ namespace Asteroid {
         cooldownRate = _cooldownRate;
     }
 
-    void Gun::fireBullet(double t, float angle, float speed, glm::vec2 pos) {
+    void Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
         static double lastFiredBulletAt = 0;
         static double maxedOutAt = 0;
         if (t - lastFiredBulletAt < 1 / bulletsPerSecond) {
@@ -25,7 +25,7 @@ namespace Asteroid {
         }
         lastFiredBulletAt = t;
         Projectile bullet;
-        bullet.initialize(angle, speed, pos);
+        bullet.initialize(pos, vel);
         bullets.push_back(bullet);
     }
 

@@ -7,18 +7,24 @@ static GLuint projectileShader;
 static bool shaderInitialized = false;
 
 namespace Asteroid {
-	void Projectile::initialize(float pAngle, float pSpeed, glm::vec2 pPos) {
+	void Projectile::initialize(glm::vec2 pPos, glm::vec2 vel) {
 		if (!shaderInitialized) {
 			projectileShader = createShaderProgram(
 				shaderFile("projectile.vert"), shaderFile("projectile.geo"), shaderFile("projectile.frag"));
 			shaderInitialized = true;
 		}
 		shaderProgram = projectileShader;
-		speed = pSpeed;
-		angle = pAngle;
-		pos = pPos;
+		float r = 0.3;
+		rb = Rigidbody(50, pPos);
+		rb.applyVelocity(vel);
+		rb.applyForce(glm::normalize(vel) * glm::vec2(BULLET_FORCE, BULLET_FORCE));
+		coll = Collider(&rb, r, PROJECTILE);
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
+		radius = glGetUniformLocation(shaderProgram, "radius");
 		startTime = 0;
+
+		glUseProgram(shaderProgram);
+		glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
 
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
@@ -39,10 +45,7 @@ namespace Asteroid {
 		if (startTime == 0) {
 			startTime = t;
 		}
-		float frameSpeed = speed * dt;
-		pos.x += frameSpeed * cosf(angle);
-		pos.y += frameSpeed * sinf(angle);
-		pos = World::getInstance().wrapWorldCoord(pos);
+		rb.step(state, t, dt);
 	}
 
 	void Projectile::draw(GameState state) {
@@ -50,7 +53,7 @@ namespace Asteroid {
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-		glm::vec2 viewPos = World::getInstance().worldCoordToViewCoord(glm::vec2(pos.x, pos.y));
+		glm::vec2 viewPos = World::getInstance().worldCoordToViewCoord(rb.pos);
 		float projectilePos[] = {viewPos.x, viewPos.y};
 		glBufferData(GL_ARRAY_BUFFER, sizeof(projectilePos), &projectilePos, GL_STREAM_DRAW);
 		glDrawArrays(GL_POINTS, 0, 1);

@@ -12,6 +12,7 @@
 #include "game_state.hpp"
 #include "util.hpp"
 #include "world.hpp"
+#include "collision_manager.hpp"
 
 using namespace Asteroid;
 
@@ -34,6 +35,7 @@ void updateState(GameState * state, double t, double dt) {
     if (glfwGetKey(state->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(state->window, true);
     }
+	CollisionManager::getInstance().collide();
     state->player->step(*state, t, dt);
 	for each (auto asteroid in state->asteroids) {
 		asteroid->step(*state, t, dt);

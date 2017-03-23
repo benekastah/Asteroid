@@ -10,16 +10,19 @@ namespace Asteroid {
 		shaderProgram = createShaderProgram(
 			shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
 		rb = Rigidbody(mMass, mPos);
+		float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 1.5, 9, rb.mass);
+		coll = new Collider(&rb, r, ASTEROID);
+		coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));
 
 		direction = glGetUniformLocation(shaderProgram, "direction");
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
-		size = glGetUniformLocation(shaderProgram, "size");
+		radius = glGetUniformLocation(shaderProgram, "radius");
 		rotation = glGetUniformLocation(shaderProgram, "rotation");
+		color = glGetUniformLocation(shaderProgram, "color");
 
 		glUseProgram(shaderProgram);
 		glUniform1f(rotation, 1);
-		float s = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 3, 18, rb.mass);
-		glUniform1f(size, World::getInstance().worldSizeToViewSize(s));
+		glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -36,7 +39,14 @@ namespace Asteroid {
 		World::getInstance().addChangeCallback(std::bind(&Asteroid::onWorldChange, this, std::placeholders::_1));
     }
 
-    Asteroid::~Asteroid() {}
+    Asteroid::~Asteroid() {
+		glDeleteProgram(shaderProgram);
+	}
+
+	void Asteroid::onCollision(Collider mColl) {
+		glUseProgram(shaderProgram);
+		collided = true;
+	}
 
     void Asteroid::step(GameState state, double t, double dt) {
 		glUseProgram(shaderProgram);
@@ -45,6 +55,12 @@ namespace Asteroid {
 		rb.step(state, t, dt);
 		float dir = atan2f(rb.velocity.y, rb.velocity.x);
 		glUniform1f(direction, dir);
+		if (collided) {
+			glUniform4f(color, 1, 0, 0, 1);
+			collided = false;
+		} else {
+			glUniform4f(color, 1, 1, 1, 1);
+		}
 	}
 
     void Asteroid::draw(GameState state) {

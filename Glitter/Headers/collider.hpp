@@ -1,30 +1,33 @@
 #pragma once
 
 #include <set>
-#include <tuple>
+#include <functional>
 
 #include "glm/vec2.hpp"
 
-#include "game_object.hpp"
 #include "rigidbody.hpp"
 
 namespace Asteroid {
-	class ColliderManager {
-	public:
-		static std::set<Collider *> colliders;
 
-		static void add(Collider * coll);
-		static void remove(Collider * rb);
-
-		std::vector<std::tuple<Collider, Collider>> getCollisions();
+	enum ObjectType {
+		PLAYER, PROJECTILE, ASTEROID
 	};
 
-	class Collider : GameObject {
+	class Collider {
 	public:
-		Collider(Rigidbody * mRb, float mSize);
+		Collider();
+		Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType);
 		~Collider();
 
 		Rigidbody * rb;
-		float size;
+		float radius;
+		enum ObjectType type;
+
+		bool intersects(const Collider coll);
+		void onCollision(const Collider coll);
+		void addCollisionCallback(std::function<void(const Collider)> cb);
+
+	private:
+        std::vector<std::function<void(const Collider)>> collisionCallbacks;
 	};
 }

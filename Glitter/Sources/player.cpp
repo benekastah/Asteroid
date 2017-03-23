@@ -11,8 +11,14 @@ namespace Asteroid {
 			shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"));
 		rb = Rigidbody(5000, glm::vec2(50, 50));
 		rb.maxVelocity = 100;
+		float r = 1.5;
+		coll = new Collider(&rb, r, PLAYER);
 		direction = glGetUniformLocation(shaderProgram, "direction");
+		radius = glGetUniformLocation(shaderProgram, "radius");
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
+
+		glUseProgram(shaderProgram);
+		glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
 
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
@@ -66,8 +72,7 @@ namespace Asteroid {
 		glUniform1f(direction, dir);
 
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-			float speed = sqrtf(powf(rb.velocity.x, 2) + powf(rb.velocity.y, 2));
-			gun.fireBullet(t, dir, speed + 50, rb.pos);
+			gun.fireBullet(t, rb.velocity, rb.pos);
 		}
 
 		gun.step(state, t, dt);

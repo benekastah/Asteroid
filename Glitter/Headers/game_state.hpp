@@ -8,6 +8,7 @@
 #include "asteroid.hpp"
 
 namespace Asteroid {
+
     class GameState {
     public:
         GLFWwindow * window;

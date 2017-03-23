@@ -43,10 +43,8 @@ float maxf(float a, float b) {
 }
 
 float scale(float min1, float max1, float min2, float max2, float val) {
-    float d1 = max1 - min1;
-    float d2 = max2 - min2;
-    float ratio = d2 / d1;
-    return ((val - min1) * ratio) + min2;
+	float percent = (val - min1) / (max1 - min1);
+	return percent * (max2 - min2) + min2;
 }
 
 float randfBtwn(float min, float max) {

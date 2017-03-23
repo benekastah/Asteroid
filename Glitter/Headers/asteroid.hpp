@@ -7,6 +7,7 @@
 #include "util.hpp"
 #include "renderable.hpp"
 #include "rigidbody.hpp"
+#include "collider.hpp"
 #include "world.hpp"
 
 #define ASTEROID_MASS_MIN 1000
@@ -19,16 +20,20 @@ namespace Asteroid {
     public:
         GLuint shaderProgram;
 		Rigidbody rb;
+		Collider * coll;
 
         Asteroid(float mass, glm::vec2 pos);
         ~Asteroid();
+
+		void onCollision(Collider coll);
 
         void step(GameState state, double t, double dt);
         void draw(GameState state);
 
     private:
-        GLint direction, sizeRatio, size, rotation;
+        GLint direction, sizeRatio, radius, rotation, color;
         GLuint vao, vbo;
+		bool collided;
         void onWorldChange(World world);
     };
 }
