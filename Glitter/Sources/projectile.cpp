@@ -1,3 +1,5 @@
+#include <functional>
+
 #include "projectile.hpp"
 
 #include "game_state.hpp"
@@ -8,6 +10,7 @@ static bool shaderInitialized = false;
 
 namespace Asteroid {
 	void Projectile::initialize(glm::vec2 pPos, glm::vec2 vel) {
+		alive = true;
 		if (!shaderInitialized) {
 			projectileShader = createShaderProgram(
 				shaderFile("projectile.vert"), shaderFile("projectile.geo"), shaderFile("projectile.frag"));
@@ -15,10 +18,14 @@ namespace Asteroid {
 		}
 		shaderProgram = projectileShader;
 		float r = 0.3;
-		rb = Rigidbody(50, pPos);
+		rb = Rigidbody(25, pPos);
+		if (vel.x == 0 && vel.y == 0) {
+			vel.x = 1;
+		}
 		rb.applyVelocity(vel);
 		rb.applyForce(glm::normalize(vel) * glm::vec2(BULLET_FORCE, BULLET_FORCE));
-		coll = Collider(&rb, r, PROJECTILE);
+		coll = new Collider(&rb, r, PROJECTILE);
+		coll->addCollisionCallback(std::bind(&Projectile::onCollide, this, std::placeholders::_1));
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
 		radius = glGetUniformLocation(shaderProgram, "radius");
 		startTime = 0;
@@ -42,6 +49,9 @@ namespace Asteroid {
 	}
 
 	void Projectile::step(GameState state, double t, double dt) {
+		if (!alive) {
+			return;
+		}
 		if (startTime == 0) {
 			startTime = t;
 		}
@@ -49,6 +59,9 @@ namespace Asteroid {
 	}
 
 	void Projectile::draw(GameState state) {
+		if (!alive) {
+			return;
+		}
 		glUseProgram(shaderProgram);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -65,4 +78,10 @@ namespace Asteroid {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glUniform2f(sizeRatio, world.getGlRatio().x, world.getGlRatio().y);
 	}
+
+	void Projectile::onCollide(const Collider coll) {
+		alive = false;
+	}
+
+
 }

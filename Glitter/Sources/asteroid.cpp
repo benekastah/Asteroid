@@ -6,6 +6,7 @@
 
 namespace Asteroid {
     Asteroid::Asteroid(float mMass, glm::vec2 mPos) {
+		alive = true;
 		mMass = maxf(minf(mMass, ASTEROID_MASS_MAX), ASTEROID_MASS_MIN);
 		shaderProgram = createShaderProgram(
 			shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
@@ -43,12 +44,18 @@ namespace Asteroid {
 		glDeleteProgram(shaderProgram);
 	}
 
-	void Asteroid::onCollision(Collider mColl) {
+	void Asteroid::onCollision(const Collider other) {
 		glUseProgram(shaderProgram);
 		collided = true;
+		if (other.type == PROJECTILE) {
+			alive = false;
+		}
 	}
 
     void Asteroid::step(GameState state, double t, double dt) {
+		if (!alive) {
+			return;
+		}
 		glUseProgram(shaderProgram);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -64,6 +71,9 @@ namespace Asteroid {
 	}
 
     void Asteroid::draw(GameState state) {
+		if (!alive) {
+			return;
+		}
 		glUseProgram(shaderProgram);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);

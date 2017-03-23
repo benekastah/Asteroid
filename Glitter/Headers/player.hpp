@@ -19,6 +19,7 @@ namespace Asteroid {
         GLuint shaderProgram;
 		Rigidbody rb;
 		Collider * coll;
+		bool alive;
 
         Player();
         ~Player();
@@ -32,5 +33,6 @@ namespace Asteroid {
         Gun gun;
 
         void onWorldChange(World world);
+		void onCollide(const Collider coll);
     };
 }

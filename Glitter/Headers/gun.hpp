@@ -21,6 +21,6 @@ namespace Asteroid {
         float bulletTimeToLive;
         float bulletsPerSecond;
         float cooldownRate;
-        std::vector<Projectile> bullets;
+        std::vector<Projectile *> bullets;
     };
 }

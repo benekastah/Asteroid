@@ -24,18 +24,19 @@ namespace Asteroid {
             return;
         }
         lastFiredBulletAt = t;
-        Projectile bullet;
-        bullet.initialize(pos, vel);
+        auto bullet = new Projectile();
+        bullet->initialize(pos, vel);
         bullets.push_back(bullet);
     }
 
     void Gun::step(GameState state, double t, double dt) {
         std::vector<int> toDelete;
         for (int i = 0; i < bullets.size(); i++) {
-            if (bullets[i].startTime != 0 && t - bullets[i].startTime >= bulletTimeToLive) {
+            if (bullets[i]->startTime != 0 && t - bullets[i]->startTime >= bulletTimeToLive || !bullets[i]->alive) {
+				delete bullets[i];
                 toDelete.insert(toDelete.begin(), i);
             } else {
-                bullets[i].step(state, t, dt);
+                bullets[i]->step(state, t, dt);
             }
         }
         for (int i = 0; i < toDelete.size(); i++) {
@@ -45,7 +46,7 @@ namespace Asteroid {
 
     void Gun::draw(GameState state) {
         for (int i = 0; i < bullets.size(); i++) {
-            bullets[i].draw(state);
+            bullets[i]->draw(state);
         }
     }
 }

@@ -7,12 +7,14 @@
 
 namespace Asteroid {
 	Player::Player() {
+		alive = true;
 		shaderProgram = createShaderProgram(
 			shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"));
 		rb = Rigidbody(5000, glm::vec2(50, 50));
 		rb.maxVelocity = 100;
 		float r = 1.5;
 		coll = new Collider(&rb, r, PLAYER);
+		coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1));
 		direction = glGetUniformLocation(shaderProgram, "direction");
 		radius = glGetUniformLocation(shaderProgram, "radius");
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
@@ -42,6 +44,9 @@ namespace Asteroid {
 	}
 
 	void Player::step(GameState state, double t, double dt) {
+		if (!alive) {
+			return;
+		}
 		glUseProgram(shaderProgram);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -79,6 +84,9 @@ namespace Asteroid {
 	}
 
 	void Player::draw(GameState state) {
+		if (!alive) {
+			return;
+		}
 		glUseProgram(shaderProgram);
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -96,5 +104,9 @@ namespace Asteroid {
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glUniform2f(sizeRatio, world.getGlRatio().x, world.getGlRatio().y);
+	}
+
+	void Player::onCollide(const Collider other) {
+		alive = false;
 	}
 }

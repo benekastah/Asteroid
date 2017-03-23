@@ -36,9 +36,22 @@ void updateState(GameState * state, double t, double dt) {
         glfwSetWindowShouldClose(state->window, true);
     }
 	CollisionManager::getInstance().collide();
-    state->player->step(*state, t, dt);
-	for each (auto asteroid in state->asteroids) {
-		asteroid->step(*state, t, dt);
+	if (state->player->alive) {
+		state->player->step(*state, t, dt);
+	}
+
+	std::vector<int> toDelete;
+	for (int i = 0; i < state->asteroids.size(); i++) {
+		auto asteroid = state->asteroids[i];
+		if (asteroid->alive) {
+			asteroid->step(*state, t, dt);
+		} else {
+			delete asteroid;
+			toDelete.insert(toDelete.begin(), i);
+		}
+	}
+	for each (int i in toDelete) {
+		state->asteroids.erase(state->asteroids.begin() + i);
 	}
 }
 

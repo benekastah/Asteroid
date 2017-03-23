@@ -21,6 +21,7 @@ namespace Asteroid {
         GLuint shaderProgram;
 		Rigidbody rb;
 		Collider * coll;
+		bool alive;
 
         Asteroid(float mass, glm::vec2 pos);
         ~Asteroid();

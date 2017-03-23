@@ -10,14 +10,15 @@
 #include "collider.hpp"
 #include "rigidbody.hpp"
 
-#define BULLET_FORCE 10000
+#define BULLET_FORCE 100000
 
 namespace Asteroid {
     class Projectile : Renderable {
     public:
         float startTime;
 		Rigidbody rb;
-		Collider coll;
+		Collider * coll;
+		bool alive;
 
         void initialize(glm::vec2 pPos, glm::vec2 vel);
 
@@ -30,5 +31,7 @@ namespace Asteroid {
         GLuint shaderProgram;
         GLuint vao, vbo;
         GLuint sizeRatio, radius;
+
+		void onCollide(const Collider coll);
     };
 }
