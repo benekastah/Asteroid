@@ -4,7 +4,7 @@ namespace Asteroid {
     GameState::GameState(GLFWwindow * window) {
         this->window = window;
         player = new Player();
-		auto safeSpace = Collider(&player->rb, 10, PLAYER);
+		auto safeSpace = Collider(&player->rb, 15, PLAYER);
         sidebar = new Sidebar();
 		for (int i = 0; i < 6; i++) {
 			auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX), World::getInstance().randPos());

@@ -15,6 +15,7 @@ namespace Asteroid {
 		float r = 1.5;
 		coll = new Collider(&rb, r, PLAYER);
 		coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1));
+		coll->enable();
 		direction = glGetUniformLocation(shaderProgram, "direction");
 		radius = glGetUniformLocation(shaderProgram, "radius");
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
@@ -35,8 +36,6 @@ namespace Asteroid {
 
 		onWorldChange(World::getInstance());
 		World::getInstance().addChangeCallback(std::bind(&Player::onWorldChange, this, std::placeholders::_1));
-
-		gun.initialize(5, 1.2, 3, 0.5);
 	}
 
 	Player::~Player() {

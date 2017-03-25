@@ -20,11 +20,9 @@ namespace Asteroid {
 	}
 
 	void CollisionManager::collide() {
-		for (auto i = colliders.cbegin(); i != colliders.cend(); ++i) {
-			for (auto j = colliders.cbegin(); j != colliders.cend(); ++j) {
-				if (i != j) {
-					auto a = *i;
-					auto b = *j;
+		for (auto a : colliders) {
+			for (auto b : colliders) {
+				if (a != b) {
 					if (a->intersects(*b)) {
 						a->onCollision(*b);
 						b->onCollision(*a);

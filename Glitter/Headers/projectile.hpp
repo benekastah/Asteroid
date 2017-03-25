@@ -10,8 +10,6 @@
 #include "collider.hpp"
 #include "rigidbody.hpp"
 
-#define BULLET_FORCE 100000
-
 namespace Asteroid {
     class Projectile : Renderable {
     public:
@@ -20,7 +18,8 @@ namespace Asteroid {
 		Collider * coll;
 		bool alive;
 
-        void initialize(glm::vec2 pPos, glm::vec2 vel);
+		~Projectile();
+        Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel);
 
         void step(GameState state, double t, double dt);
         void draw(GameState state);

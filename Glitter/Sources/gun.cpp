@@ -3,12 +3,15 @@
 #include "game_state.hpp"
 
 namespace Asteroid {
-    void Gun::initialize(int _maxBullets, float _bulletTimeToLive, float _bulletsPerSecond, float _cooldownRate) {
-        maxBullets = _maxBullets;
-        bulletTimeToLive = _bulletTimeToLive;
-        bulletsPerSecond = _bulletsPerSecond;
-        cooldownRate = _cooldownRate;
-    }
+
+	Gun::Gun() {
+		bulletMass = 25;
+		bulletForce = 125000;
+		maxBullets = 5;
+		bulletTimeToLive = 1.2;
+		bulletsPerSecond = 3;
+		cooldownRate = 0.5;
+	}
 
     void Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
         static double lastFiredBulletAt = 0;
@@ -24,8 +27,7 @@ namespace Asteroid {
             return;
         }
         lastFiredBulletAt = t;
-        auto bullet = new Projectile();
-        bullet->initialize(pos, vel);
+        auto bullet = new Projectile(bulletMass, bulletForce, pos, vel);
         bullets.push_back(bullet);
     }
 
@@ -33,13 +35,13 @@ namespace Asteroid {
         std::vector<int> toDelete;
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets[i]->startTime != 0 && t - bullets[i]->startTime >= bulletTimeToLive || !bullets[i]->alive) {
-				delete bullets[i];
                 toDelete.insert(toDelete.begin(), i);
             } else {
                 bullets[i]->step(state, t, dt);
             }
         }
         for (int i = 0; i < toDelete.size(); i++) {
+			delete bullets[toDelete[i]];
             bullets.erase(bullets.begin() + toDelete[i]);
         }
     }

@@ -14,6 +14,7 @@ namespace Asteroid {
 		float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 1.5, 9, rb.mass);
 		coll = new Collider(&rb, r, ASTEROID);
 		coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));
+		coll->enable();
 
 		direction = glGetUniformLocation(shaderProgram, "direction");
 		sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");

@@ -4,16 +4,25 @@
 
 namespace Asteroid {
 
-	Collider::Collider() {}
-
 	Collider::Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType) {
 		rb = mRb;
 		radius = mRadius;
 		type = mType;
-		CollisionManager::getInstance().add(this);
 	}
 
 	Collider::~Collider() {
+		if (enabled) {
+			disable();
+		}
+	}
+
+	void Collider::enable() {
+		enabled = true;
+		CollisionManager::getInstance().add(this);
+	}
+
+	void Collider::disable () {
+		enabled = false;
 		CollisionManager::getInstance().remove(this);
 	}
 
@@ -30,7 +39,9 @@ namespace Asteroid {
 	}
 
 	void Collider::onCollision(const Collider coll) {
-		if (type == PROJECTILE && coll.type == PLAYER || type == PLAYER && coll.type == PROJECTILE) {
+		if (type == PROJECTILE && coll.type == PLAYER ||
+			type == PLAYER && coll.type == PROJECTILE ||
+			type == PROJECTILE && coll.type == PROJECTILE) {
 			return;
 		}
 
