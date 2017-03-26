@@ -37,7 +37,7 @@ namespace Asteroid {
 	}
 
 	bool circlesIntersect(glm::vec2 aPos, float aR, glm::vec2 bPos, float bR) {
-		auto diff = aPos - toVec2(50);
+		auto diff = toVec2(50) - aPos;
 		auto world = World::getInstance();
 		aPos = world.wrapWorldCoord(aPos + diff);
 		bPos = world.wrapWorldCoord(bPos + diff);
@@ -45,7 +45,7 @@ namespace Asteroid {
 	}
 
 	glm::vec2 distance(glm::vec2 aPos, glm::vec2 bPos) {
-		auto diff = aPos - toVec2(50);
+		auto diff = toVec2(50) - aPos;
 		auto world = World::getInstance();
 		return world.wrapWorldCoord(aPos + diff) - world.wrapWorldCoord(bPos + diff);
 	}

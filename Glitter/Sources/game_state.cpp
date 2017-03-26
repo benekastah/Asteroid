@@ -17,10 +17,6 @@ namespace Asteroid {
 			asteroid->rb.applyForce(force);
 			asteroids.push_back(asteroid);
 		}
-		//auto asteroid1 = new Asteroid(ASTEROID_MASS_MAX / 2, glm::vec2(99, 50));
-		//asteroids.push_back(asteroid1);
-		//auto asteroid2 = new Asteroid(ASTEROID_MASS_MAX / 2, glm::vec2(1, 45));
-		//asteroids.push_back(asteroid2);
     }
 
 	void GameState::step(double t, double dt) {

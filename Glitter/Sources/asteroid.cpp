@@ -25,6 +25,7 @@ namespace Asteroid {
 		glUseProgram(shaderProgram);
 		glUniform1f(rotation, 1);
 		glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
+		glUniform4f(color, 1, 1, 1, 1);
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -65,7 +66,7 @@ namespace Asteroid {
 		float dir = atan2f(rb.velocity.y, rb.velocity.x);
 		glUniform1f(direction, dir);
 		if (collided) {
-			glUniform4f(color, 1, 0, 0, 1);
+			//glUniform4f(color, 1, 0, 0, 1);
 			collided = false;
 		} else {
 			glUniform4f(color, 1, 1, 1, 1);
