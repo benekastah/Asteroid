@@ -4,8 +4,6 @@
 
 namespace Asteroid {
 
-	const float tau = (float) PI * 2;
-
 	CollisionManager & CollisionManager::getInstance() {
 		static CollisionManager manager;
 		return manager;
@@ -20,13 +18,15 @@ namespace Asteroid {
 	}
 
 	void CollisionManager::collide() {
-		for (auto a : colliders) {
-			for (auto b : colliders) {
-				if (a != b) {
-					if (a->intersects(*b)) {
-						a->onCollision(*b);
-						b->onCollision(*a);
-					}
+		for (auto it = colliders.begin(); it != colliders.end(); ++it) {
+			auto jt = it;
+			++jt;
+			for (; jt != colliders.end(); ++jt) {
+				auto a = *it;
+				auto b = *jt;
+				if (a->intersects(*b)) {
+					a->onCollision(*b);
+					b->onCollision(*a);
 				}
 			}
 		}

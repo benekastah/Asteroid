@@ -11,9 +11,7 @@ static bool shaderInitialized = false;
 namespace Asteroid {
 
 	Projectile::~Projectile() {
-		if (coll != NULL) {
-			delete coll;
-		}
+		delete coll;
 	}
 
 	Projectile::Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel) {

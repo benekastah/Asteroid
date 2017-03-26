@@ -20,11 +20,7 @@ void render(GameState state) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    state.player->draw(state);
-	for each (auto asteroid in state.asteroids) {
-		asteroid->draw(state);
-	}
-    state.sidebar->draw(state);
+	state.draw();
 
     // Flip Buffers and Draw
     glfwSwapBuffers(state.window);
@@ -36,23 +32,8 @@ void updateState(GameState * state, double t, double dt) {
         glfwSetWindowShouldClose(state->window, true);
     }
 	CollisionManager::getInstance().collide();
-	if (state->player->alive) {
-		state->player->step(*state, t, dt);
-	}
-
-	std::vector<int> toDelete;
-	for (int i = 0; i < state->asteroids.size(); i++) {
-		auto asteroid = state->asteroids[i];
-		if (asteroid->alive) {
-			asteroid->step(*state, t, dt);
-		} else {
-			delete asteroid;
-			toDelete.insert(toDelete.begin(), i);
-		}
-	}
-	for each (int i in toDelete) {
-		state->asteroids.erase(state->asteroids.begin() + i);
-	}
+	
+	state->step(t, dt);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

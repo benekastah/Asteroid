@@ -40,10 +40,12 @@ namespace Asteroid {
 
 	Player::~Player() {
 		glDeleteProgram(shaderProgram);
+		delete coll;
 	}
 
 	void Player::step(GameState state, double t, double dt) {
 		if (!alive) {
+			coll->disable();
 			return;
 		}
 		glUseProgram(shaderProgram);

@@ -10,7 +10,13 @@
 char* readFile(const char* fname);
 
 float scale(float min1, float max1, float min2, float max2, float val);
+void _srand();
+float randf();
 float randfBtwn(float min, float max);
+
+glm::vec2 toVec2(float x);
+glm::vec2 randVec2();
+glm::vec2 randVec2(float magnitude);
 
 float minf(float a, float b);
 float maxf(float a, float b);

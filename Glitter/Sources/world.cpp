@@ -68,15 +68,15 @@ namespace Asteroid {
 	}
 
 	glm::vec2 World::wrapWorldCoord(glm::vec2 coord) {
-		if (coord.x < 0) {
+		// Add WORLD_WIDTH and WORLD_HEIGHT ahead of time for better branch prediction.
+		// Not sure if this matters, but it helps in theory.
+		coord.x = fmodf(WORLD_WIDTH + coord.x, WORLD_WIDTH);
+		coord.y = fmodf(WORLD_HEIGHT + coord.y, WORLD_HEIGHT);
+		while (coord.x < 0) {
 			coord.x += WORLD_WIDTH;
-		} else if (coord.x > WORLD_WIDTH) {
-			coord.x -= WORLD_WIDTH;
 		}
-		if (coord.y < 0) {
+		while (coord.y < 0) {
 			coord.y += WORLD_HEIGHT;
-		} else if (coord.y > WORLD_HEIGHT) {
-			coord.y -= WORLD_HEIGHT;
 		}
 		return coord;
 	}

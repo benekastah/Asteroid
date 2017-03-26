@@ -17,6 +17,8 @@ namespace Asteroid {
 		std::vector<Asteroid *> asteroids;
 
         GameState(GLFWwindow * window);
-        ~GameState();
+
+		void step(double t, double dt);
+		void draw();
     };
 }

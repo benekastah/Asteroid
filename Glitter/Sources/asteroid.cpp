@@ -43,6 +43,7 @@ namespace Asteroid {
 
     Asteroid::~Asteroid() {
 		glDeleteProgram(shaderProgram);
+		delete coll;
 	}
 
 	void Asteroid::onCollision(const Collider other) {

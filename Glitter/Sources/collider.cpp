@@ -1,6 +1,7 @@
 #include "collider.hpp"
 #include "collision_manager.hpp"
 #include "util.hpp"
+#include "world.hpp"
 
 namespace Asteroid {
 
@@ -8,6 +9,7 @@ namespace Asteroid {
 		rb = mRb;
 		radius = mRadius;
 		type = mType;
+		enabled = false;
 	}
 
 	Collider::~Collider() {
@@ -17,13 +19,17 @@ namespace Asteroid {
 	}
 
 	void Collider::enable() {
-		enabled = true;
-		CollisionManager::getInstance().add(this);
+		if (!enabled) {
+			enabled = true;
+			CollisionManager::getInstance().add(this);
+		}
 	}
 
 	void Collider::disable () {
-		enabled = false;
-		CollisionManager::getInstance().remove(this);
+		if (enabled) {
+			enabled = false;
+			CollisionManager::getInstance().remove(this);
+		}
 	}
 
 	void Collider::addCollisionCallback(std::function<void(Collider)> cb) {
@@ -31,7 +37,17 @@ namespace Asteroid {
 	}
 
 	bool circlesIntersect(glm::vec2 aPos, float aR, glm::vec2 bPos, float bR) {
+		auto diff = aPos - toVec2(50);
+		auto world = World::getInstance();
+		aPos = world.wrapWorldCoord(aPos + diff);
+		bPos = world.wrapWorldCoord(bPos + diff);
 		return powf(aPos.x - bPos.x, 2) + powf(aPos.y - bPos.y, 2) <= powf(aR + bR, 2);
+	}
+
+	glm::vec2 distance(glm::vec2 aPos, glm::vec2 bPos) {
+		auto diff = aPos - toVec2(50);
+		auto world = World::getInstance();
+		return world.wrapWorldCoord(aPos + diff) - world.wrapWorldCoord(bPos + diff);
 	}
 
 	bool Collider::intersects(const Collider coll) {
@@ -52,7 +68,13 @@ namespace Asteroid {
 
 		// Don't allow intersections that are too deep
 		if (circlesIntersect(rb->pos, radius - 0.5f, coll.rb->pos, coll.radius)) {
-			rb->applyPos(rb->pos + (rb->pos - coll.rb->pos));
+			auto pos = rb->pos + distance(rb->pos, coll.rb->pos) / toVec2(2);
+			if (pos == rb->pos) {
+				pos += randVec2();
+			}
+			rb->applyPos(pos);
+			// Apply a small velocity to push the two bodies apart.
+			rb->applyVelocity((pos - rb->pos) * randVec2(10));
 		}
 
 		for each (auto cb in collisionCallbacks) {

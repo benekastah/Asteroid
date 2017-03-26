@@ -17,7 +17,43 @@ namespace Asteroid {
 			asteroid->rb.applyForce(force);
 			asteroids.push_back(asteroid);
 		}
+		//auto asteroid1 = new Asteroid(ASTEROID_MASS_MAX / 2, glm::vec2(99, 50));
+		//asteroids.push_back(asteroid1);
+		//auto asteroid2 = new Asteroid(ASTEROID_MASS_MAX / 2, glm::vec2(1, 45));
+		//asteroids.push_back(asteroid2);
     }
 
-    GameState::~GameState() {}
+	void GameState::step(double t, double dt) {
+		player->step(*this, t, dt);
+
+		std::vector<int> toDelete;
+		for (int i = 0; i < asteroids.size(); i++) {
+			auto asteroid = asteroids[i];
+			if (asteroid->alive) {
+				asteroid->step(*this, t, dt);
+			} else {
+				float mass = asteroid->rb.mass / 2;
+				if (mass >= ASTEROID_MASS_MIN) {
+					for (int i = 0; i < 2; i++) {
+						auto ast = new Asteroid(mass, asteroid->rb.pos);
+						ast->rb.applyVelocity(asteroid->rb.velocity);
+						asteroids.push_back(ast);
+					}
+				}
+				delete asteroid;
+				toDelete.insert(toDelete.begin(), i);
+			}
+		}
+		for each (int i in toDelete) {
+			asteroids.erase(asteroids.begin() + i);
+		}
+	}
+
+	void GameState::draw() {
+		player->draw(*this);
+		for each (auto asteroid in asteroids) {
+			asteroid->draw(*this);
+		}
+		sidebar->draw(*this);
+	}
 }

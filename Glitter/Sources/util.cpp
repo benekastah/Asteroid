@@ -47,12 +47,32 @@ float scale(float min1, float max1, float min2, float max2, float val) {
 	return percent * (max2 - min2) + min2;
 }
 
-float randfBtwn(float min, float max) {
+void _srand() {
     static bool initialized = false;
     if (!initialized) {
         srand((unsigned int)(glfwGetTime() * 1e9));
     }
-    return scale(0, RAND_MAX, min, max, (float)rand());
+}
+
+float randf() {
+	_srand();
+	return (float) rand();
+}
+
+float randfBtwn(float min, float max) {
+    return scale(0, RAND_MAX, min, max, randf());
+}
+
+glm::vec2 toVec2(float x) {
+	return glm::vec2(x, x);
+}
+
+glm::vec2 randVec2() {
+	return randVec2(1);
+}
+
+glm::vec2 randVec2(float magnitude) {
+	return glm::normalize(glm::vec2(randf(), randf())) * toVec2(magnitude);
 }
 
 bool strEndsWith(const char * str, const char * ending) {

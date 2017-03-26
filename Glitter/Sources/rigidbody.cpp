@@ -23,8 +23,13 @@ namespace Asteroid {
 	}
 
 	void Rigidbody::applyVelocity(glm::vec2 vel) {
-		nextVelocity.first = true;
-		nextVelocity.second = vel;
+		if (nextVelocity.first) {
+			nextVelocity.second += vel;
+			nextVelocity.second /= toVec2(2);
+		} else {
+			nextVelocity.first = true;
+			nextVelocity.second = vel;
+		}
 	}
 
 	void Rigidbody::applyPos(glm::vec2 mPos) {
