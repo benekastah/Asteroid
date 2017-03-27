@@ -24,7 +24,7 @@ namespace Asteroid {
 		clearAsteroids();
 		auto safeSpace = Collider(&player->rb, 20, PLAYER);
 		for (int i = 0; i < level; i++) {
-			auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX), World::getInstance().randPos());
+			auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN * 4, ASTEROID_MASS_MAX), World::getInstance().randPos());
 			while (asteroid->coll->intersects(safeSpace)) {
 				asteroid->rb.pos = World::getInstance().randPos();
 			}

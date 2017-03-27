@@ -7,10 +7,10 @@ namespace Asteroid {
 	Gun::Gun() {
 		bulletMass = 25;
 		bulletForce = 125000;
-		maxBullets = 5;
-		bulletTimeToLive = 1.2;
-		bulletsPerSecond = 3;
-		cooldownRate = 0.5;
+		maxBullets = 4;
+		bulletTimeToLive = 1;
+		bulletsPerSecond = 7;
+		cooldownRate = 0;
 	}
 
 	Gun::~Gun() {

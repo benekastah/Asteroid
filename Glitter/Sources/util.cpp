@@ -75,6 +75,10 @@ glm::vec2 randVec2(float magnitude) {
 	return glm::normalize(glm::vec2(randf(), randf())) * toVec2(magnitude);
 }
 
+glm::vec2 randVec2(float min, float max) {
+	return glm::vec2(randfBtwn(min, max), randfBtwn(min, max));
+}
+
 bool strEndsWith(const char * str, const char * ending) {
     int strL = strlen(str);
     int endingL = strlen(ending);

@@ -70,11 +70,16 @@ namespace Asteroid {
 		if (circlesIntersect(rb->pos, radius - 0.5f, coll.rb->pos, coll.radius)) {
 			auto pos = rb->pos + distance(rb->pos, coll.rb->pos) / toVec2(2);
 			if (pos == rb->pos) {
-				pos += randVec2();
+				if (randfBtwn(0, 1) > 0.5) {
+					pos.x += randfBtwn(-1, 1);
+				} else {
+					pos.y += randfBtwn(-1, 1);
+				}
 			}
 			rb->applyPos(pos);
 			// Apply a small velocity to push the two bodies apart.
-			rb->applyVelocity((pos - rb->pos) * randVec2(10));
+			auto posDiff = pos - rb->pos;
+			rb->applyVelocity((pos - rb->pos) * randVec2(5, 11));
 		}
 
 		for each (auto cb in collisionCallbacks) {
