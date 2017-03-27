@@ -7,6 +7,8 @@
 #include "sidebar.hpp"
 #include "asteroid.hpp"
 
+#define PAUSE_BETWEEN_LEVELS 2
+
 namespace Asteroid {
 
     class GameState {
@@ -15,10 +17,17 @@ namespace Asteroid {
         Player * player;
         Sidebar * sidebar;
 		std::vector<Asteroid *> asteroids;
+		unsigned int level;
 
         GameState(GLFWwindow * window);
 
 		void step(double t, double dt);
 		void draw();
+		void loadLevel();
+		void clearAsteroids();
+
+	private:
+		double resetAt;
+		double nextLevelAt;
     };
 }

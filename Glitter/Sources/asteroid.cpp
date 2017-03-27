@@ -55,6 +55,23 @@ namespace Asteroid {
 		}
 	}
 
+	bool didCrossBoundary(glm::vec2 pos, float radius) {
+		static unsigned int numAngles = 4;
+		static float totalRadians = 2 * PI;
+		static float advanceBy = totalRadians / numAngles;
+		auto world = World::getInstance();
+		float dir = 0;
+		for (int i = 0; i < numAngles; i++) {
+			auto p = pos + glm::vec2(radius * cosf(dir), radius * sinf(dir));
+			auto p2 = world.wrapWorldCoord(p);
+			if (roundf(p.x) != roundf(p2.x) || roundf(p.y) != roundf(p2.y)) {
+				return true;
+			}
+			dir += advanceBy;
+		}
+		return false;
+	}
+
     void Asteroid::step(GameState state, double t, double dt) {
 		if (!alive) {
 			return;

@@ -19,9 +19,11 @@ namespace Asteroid {
 		float bulletForce;
 
 		Gun();
-        void fireBullet(double t, glm::vec2 vel, glm::vec2 pos);
+		~Gun();
+        bool fireBullet(double t, glm::vec2 vel, glm::vec2 pos);
         void step(GameState state, double t, double dt);
         void draw(GameState state);
+		void clearBullets();
 
     private:
         std::vector<Projectile *> bullets;

@@ -1,12 +1,29 @@
 #include "game_state.hpp"
 
 namespace Asteroid {
+
     GameState::GameState(GLFWwindow * window) {
+		resetAt = 0;
+		nextLevelAt = 0;
         this->window = window;
         player = new Player();
 		auto safeSpace = Collider(&player->rb, 15, PLAYER);
         sidebar = new Sidebar();
-		for (int i = 0; i < 6; i++) {
+		level = 1;
+		loadLevel();
+    }
+
+	void GameState::clearAsteroids() {
+		for each (auto asteroid in asteroids) {
+			delete asteroid;
+		}
+		asteroids.clear();
+	}
+
+	void GameState::loadLevel() {
+		clearAsteroids();
+		auto safeSpace = Collider(&player->rb, 20, PLAYER);
+		for (int i = 0; i < level; i++) {
 			auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX), World::getInstance().randPos());
 			while (asteroid->coll->intersects(safeSpace)) {
 				asteroid->rb.pos = World::getInstance().randPos();
@@ -17,10 +34,30 @@ namespace Asteroid {
 			asteroid->rb.applyForce(force);
 			asteroids.push_back(asteroid);
 		}
-    }
+	}
 
 	void GameState::step(double t, double dt) {
 		player->step(*this, t, dt);
+
+		if (resetAt == 0 && !player->alive) {
+			resetAt = t + PAUSE_BETWEEN_LEVELS;
+		} else if (nextLevelAt == 0 && asteroids.size() == 0) {
+			nextLevelAt = t + PAUSE_BETWEEN_LEVELS;
+		}
+
+		if (resetAt != 0 && resetAt < t) {
+			resetAt = 0;
+			nextLevelAt = 0;
+			delete player;
+			player = new Player();
+			loadLevel();
+		} else if (nextLevelAt != 0 && nextLevelAt < t) {
+			resetAt = 0;
+			nextLevelAt = 0;
+			player->gun.clearBullets();
+			level++;
+			loadLevel();
+		}
 
 		std::vector<int> toDelete;
 		for (int i = 0; i < asteroids.size(); i++) {

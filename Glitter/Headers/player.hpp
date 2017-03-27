@@ -20,6 +20,7 @@ namespace Asteroid {
 		Rigidbody rb;
 		Collider * coll;
 		bool alive;
+        Gun gun;
 
         Player();
         ~Player();
@@ -30,7 +31,6 @@ namespace Asteroid {
     private:
         GLint direction, radius, sizeRatio;
         GLuint vao, vbo;
-        Gun gun;
 
         void onWorldChange(World world);
 		void onCollide(const Collider coll);

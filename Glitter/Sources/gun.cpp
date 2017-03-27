@@ -13,22 +13,34 @@ namespace Asteroid {
 		cooldownRate = 0.5;
 	}
 
-    void Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
+	Gun::~Gun() {
+		clearBullets();
+	}
+
+	void Gun::clearBullets() {
+		for each (auto bullet in bullets) {
+			delete bullet;
+		}
+		bullets.clear();
+	}
+
+    bool Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
         static double lastFiredBulletAt = 0;
         static double maxedOutAt = 0;
         if (t - lastFiredBulletAt < 1 / bulletsPerSecond) {
-            return;
+            return false;
         }
         if (bullets.size() >= maxBullets) {
             maxedOutAt = t;
-            return;
+            return false;
         }
         if (t - maxedOutAt < cooldownRate) {
-            return;
+            return false;
         }
         lastFiredBulletAt = t;
         auto bullet = new Projectile(bulletMass, bulletForce, pos, vel);
         bullets.push_back(bullet);
+		return true;
     }
 
     void Gun::step(GameState state, double t, double dt) {
