@@ -18,6 +18,8 @@ glm::vec2 toVec2(float x);
 glm::vec2 randVec2();
 glm::vec2 randVec2(float magnitude);
 glm::vec2 randVec2(float min, float max);
+glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir);
+float distance(glm::vec2 a, glm::vec2 b);
 
 float minf(float a, float b);
 float maxf(float a, float b);

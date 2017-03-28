@@ -105,4 +105,8 @@ namespace Asteroid {
             randfBtwn(0, WORLD_HEIGHT)
         );
     }
+
+    glm::vec2 World::center() {
+        return glm::vec2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+    }
 }

@@ -2,14 +2,16 @@
 
 namespace Asteroid {
 
+    static const float SPAWN_RADIUS = sqrtf(powf(WORLD_WIDTH / 2, 2) + powf(WORLD_HEIGHT / 2, 2));
+
     GameState::GameState(GLFWwindow * window) {
         resetAt = 0;
         nextLevelAt = 0;
         this->window = window;
         player = new Player();
-        auto safeSpace = Collider(&player->rb, 15, PLAYER);
         sidebar = new Sidebar();
-        level = 1;
+        level = 6;
+        asteroidsLoaded = 0;
         loadLevel();
     }
 
@@ -20,20 +22,22 @@ namespace Asteroid {
         asteroids.clear();
     }
 
+    void GameState::addAsteroid(double t) {
+        static auto center = World::getInstance().center();
+        float mass = randfBtwn(ASTEROID_MASS_MIN * 4, ASTEROID_MASS_MAX);
+        auto pos = pointOnCircle(center, SPAWN_RADIUS, randfBtwn(0, 2 * PI));
+        auto dest = pointOnCircle(center, SPAWN_RADIUS / 2, randfBtwn(0, 2 * PI));
+        auto asteroid = new Asteroid(mass, pos);
+        asteroid->rb.applyVelocity(glm::normalize(dest - pos) * toVec2(randfBtwn(10, 35)));
+        asteroids.push_back(asteroid);
+        asteroidsLoaded++;
+        loadNextAsteroidAt = t + (double) randfBtwn(0, powf(asteroids.size(), .5));
+    }
+
     void GameState::loadLevel() {
         clearAsteroids();
-        auto safeSpace = Collider(&player->rb, 20, PLAYER);
-        for (int i = 0; i < level; i++) {
-            auto asteroid = new Asteroid(randfBtwn(ASTEROID_MASS_MIN * 4, ASTEROID_MASS_MAX), World::getInstance().randPos());
-            while (asteroid->coll->intersects(safeSpace)) {
-                asteroid->rb.pos = World::getInstance().randPos();
-            }
-            auto force = glm::vec2(
-                randfBtwn(asteroid->rb.mass * -2000, asteroid->rb.mass * 2000),
-                randfBtwn(asteroid->rb.mass * -2000, asteroid->rb.mass * 2000));
-            asteroid->rb.applyForce(force);
-            asteroids.push_back(asteroid);
-        }
+        asteroidsLoaded = 0;
+        loadNextAsteroidAt = 0;
     }
 
     void GameState::step(double t, double dt) {
@@ -41,7 +45,7 @@ namespace Asteroid {
 
         if (resetAt == 0 && !player->alive) {
             resetAt = t + PAUSE_BETWEEN_LEVELS;
-        } else if (nextLevelAt == 0 && asteroids.size() == 0) {
+        } else if (nextLevelAt == 0 && asteroidsLoaded >= level && asteroids.size() == 0) {
             nextLevelAt = t + PAUSE_BETWEEN_LEVELS;
         }
 
@@ -59,11 +63,23 @@ namespace Asteroid {
             loadLevel();
         }
 
+        if (asteroidsLoaded < level && (loadNextAsteroidAt < t || asteroids.size() == 0)) {
+            addAsteroid(t);
+        }
+
         std::vector<int> toDelete;
         for (int i = 0; i < asteroids.size(); i++) {
             auto asteroid = asteroids[i];
             if (asteroid->alive) {
-                asteroid->step(*this, t, dt);
+                if (!asteroid->rb.inBounds && fabsf(distance(asteroid->rb.pos, World::getInstance().center())) > SPAWN_RADIUS) {
+                    // Catch asteroids that are moving further from the center rather than closer
+                    delete asteroid;
+                    toDelete.push_back(i);
+                    asteroidsLoaded--;
+                    addAsteroid(t);
+                } else {
+                    asteroid->step(*this, t, dt);
+                }
             } else {
                 float mass = asteroid->rb.mass / 2;
                 if (mass >= ASTEROID_MASS_MIN) {

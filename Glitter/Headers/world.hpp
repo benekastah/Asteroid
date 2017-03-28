@@ -35,6 +35,7 @@ namespace Asteroid {
         void addChangeCallback(std::function<void(World)> cb);
         struct positionBuffer getPositionBuffer(glm::vec2 pos);
         glm::vec2 randPos();
+        glm::vec2 center();
 
     private:
         glm::vec2 glRatio;

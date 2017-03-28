@@ -15,11 +15,10 @@ namespace Asteroid {
 
     class Collider {
     public:
-        Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType);
+        Collider(Rigidbody * mRb, enum ObjectType mType);
         ~Collider();
 
         Rigidbody * rb;
-        float radius;
         enum ObjectType type;
         bool enabled;
 

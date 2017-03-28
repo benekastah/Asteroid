@@ -10,9 +10,9 @@ namespace Asteroid {
         mMass = maxf(minf(mMass, ASTEROID_MASS_MAX), ASTEROID_MASS_MIN);
         shaderProgram = createShaderProgram(
             shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
-        rb = Rigidbody(mMass, mPos);
-        float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 1.5, 9, rb.mass);
-        coll = new Collider(&rb, r, ASTEROID);
+        float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 1.5, 9, mMass);
+        rb = Rigidbody(mMass, mPos, r);
+        coll = new Collider(&rb, ASTEROID);
         coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));
         coll->enable();
 
@@ -55,23 +55,6 @@ namespace Asteroid {
         }
     }
 
-    bool didCrossBoundary(glm::vec2 pos, float radius) {
-        static unsigned int numAngles = 4;
-        static float totalRadians = 2 * PI;
-        static float advanceBy = totalRadians / numAngles;
-        auto world = World::getInstance();
-        float dir = 0;
-        for (int i = 0; i < numAngles; i++) {
-            auto p = pos + glm::vec2(radius * cosf(dir), radius * sinf(dir));
-            auto p2 = world.wrapWorldCoord(p);
-            if (roundf(p.x) != roundf(p2.x) || roundf(p.y) != roundf(p2.y)) {
-                return true;
-            }
-            dir += advanceBy;
-        }
-        return false;
-    }
-
     void Asteroid::step(GameState state, double t, double dt) {
         if (!alive) {
             return;
@@ -98,10 +81,16 @@ namespace Asteroid {
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        World world = World::getInstance();
-        auto asteroidPos = world.getPositionBuffer(rb.pos);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(asteroidPos), &asteroidPos.buf, GL_STREAM_DRAW);
-        glDrawArrays(GL_POINTS, 0, 9);
+        if (rb.inBounds) {
+            auto asteroidPos = World::getInstance().getPositionBuffer(rb.pos);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(asteroidPos.buf), &asteroidPos.buf, GL_STREAM_DRAW);
+            glDrawArrays(GL_POINTS, 0, 9);
+        } else {
+            auto pos = World::getInstance().worldCoordToViewCoord(rb.pos);
+            float asteroidPos[] = { pos.x, pos.y };
+            glBufferData(GL_ARRAY_BUFFER, sizeof(asteroidPos), &asteroidPos, GL_STREAM_DRAW);
+            glDrawArrays(GL_POINTS, 0, 1);
+        }
     }
 
     void Asteroid::onWorldChange(World world) {

@@ -10,10 +10,10 @@ namespace Asteroid {
         alive = true;
         shaderProgram = createShaderProgram(
             shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"));
-        rb = Rigidbody(5000, glm::vec2(50, 50));
-        rb.maxVelocity = 100;
         float r = 1.5;
-        coll = new Collider(&rb, r, PLAYER);
+        rb = Rigidbody(5000, glm::vec2(50, 50), r);
+        rb.maxVelocity = 100;
+        coll = new Collider(&rb, PLAYER);
         coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1));
         coll->enable();
         direction = glGetUniformLocation(shaderProgram, "direction");

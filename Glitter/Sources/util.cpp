@@ -79,6 +79,14 @@ glm::vec2 randVec2(float min, float max) {
     return glm::vec2(randfBtwn(min, max), randfBtwn(min, max));
 }
 
+glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir) {
+    return pos + glm::vec2(r * cosf(dir), r * sinf(dir));
+}
+
+float distance(glm::vec2 a, glm::vec2 b) {
+    return sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2));
+}
+
 bool strEndsWith(const char * str, const char * ending) {
     int strL = strlen(str);
     int endingL = strlen(ending);

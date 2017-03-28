@@ -25,9 +25,12 @@ namespace Asteroid {
         void draw();
         void loadLevel();
         void clearAsteroids();
+        void addAsteroid(double t);
 
     private:
         double resetAt;
         double nextLevelAt;
+        double loadNextAsteroidAt;
+        unsigned int asteroidsLoaded;
     };
 }

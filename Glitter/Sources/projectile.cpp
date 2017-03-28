@@ -23,13 +23,13 @@ namespace Asteroid {
         }
         shaderProgram = projectileShader;
         float r = 0.3;
-        rb = Rigidbody(mass, pPos);
+        rb = Rigidbody(mass, pPos, r);
         if (vel.x == 0 && vel.y == 0) {
             vel.x = 1;
         }
         rb.applyVelocity(vel);
         rb.applyForce(glm::normalize(vel) * glm::vec2(force, force));
-        coll = new Collider(&rb, r, PROJECTILE);
+        coll = new Collider(&rb, PROJECTILE);
         coll->addCollisionCallback(std::bind(&Projectile::onCollide, this, std::placeholders::_1));
         coll->enable();
         sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");

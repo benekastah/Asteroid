@@ -5,9 +5,8 @@
 
 namespace Asteroid {
 
-    Collider::Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType) {
+    Collider::Collider(Rigidbody * mRb, enum ObjectType mType) {
         rb = mRb;
-        radius = mRadius;
         type = mType;
         enabled = false;
     }
@@ -36,12 +35,18 @@ namespace Asteroid {
         collisionCallbacks.push_back(cb);
     }
 
-    bool circlesIntersect(glm::vec2 aPos, float aR, glm::vec2 bPos, float bR) {
-        auto diff = toVec2(50) - aPos;
+    bool circlesIntersect(Rigidbody aRb, Rigidbody bRb) {
+        auto diff = toVec2(50) - aRb.pos;
         auto world = World::getInstance();
-        aPos = world.wrapWorldCoord(aPos + diff);
-        bPos = world.wrapWorldCoord(bPos + diff);
-        return powf(aPos.x - bPos.x, 2) + powf(aPos.y - bPos.y, 2) <= powf(aR + bR, 2);
+        auto aPos = aRb.pos + diff;
+        auto bPos = bRb.pos + diff;
+        if (aRb.inBounds) {
+            aPos = world.wrapWorldCoord(aPos);
+        }
+        if (bRb.inBounds) {
+            bPos = world.wrapWorldCoord(bPos);
+        }
+        return powf(aPos.x - bPos.x, 2) + powf(aPos.y - bPos.y, 2) <= powf(aRb.radius + bRb.radius, 2);
     }
 
     glm::vec2 distance(glm::vec2 aPos, glm::vec2 bPos) {
@@ -51,7 +56,7 @@ namespace Asteroid {
     }
 
     bool Collider::intersects(const Collider coll) {
-        return circlesIntersect(rb->pos, radius, coll.rb->pos, coll.radius);
+        return circlesIntersect(*rb, *coll.rb);
     }
 
     void Collider::onCollision(const Collider coll) {
@@ -67,7 +72,9 @@ namespace Asteroid {
             (rb->velocity.y * (rb->mass - coll.rb->mass) + 2 * coll.rb->mass * coll.rb->velocity.y) / totalMass));
 
         // Don't allow intersections that are too deep
-        if (circlesIntersect(rb->pos, radius - 0.5f, coll.rb->pos, coll.radius)) {
+        auto innerRb = *rb;
+        innerRb.radius -= 0.5f;
+        if (circlesIntersect(innerRb, *coll.rb)) {
             auto pos = rb->pos + distance(rb->pos, coll.rb->pos) / toVec2(2);
             if (pos == rb->pos) {
                 if (randfBtwn(0, 1) > 0.5) {
