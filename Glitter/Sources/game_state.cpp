@@ -22,16 +22,21 @@ namespace Asteroid {
         asteroids.clear();
     }
 
+    void pushInBounds(Asteroid * asteroid) {
+        auto center = World::getInstance().center();
+        auto dest = pointOnCircle(center, SPAWN_RADIUS / 2, randfBtwn(0, 2 * PI));
+        asteroid->rb.applyVelocity(glm::normalize(dest - asteroid->rb.pos) * toVec2(randfBtwn(10, 35)));
+    }
+
     void GameState::addAsteroid(double t) {
-        static auto center = World::getInstance().center();
+        auto center = World::getInstance().center();
         float mass = randfBtwn(ASTEROID_MASS_MIN * 4, ASTEROID_MASS_MAX);
         auto pos = pointOnCircle(center, SPAWN_RADIUS, randfBtwn(0, 2 * PI));
-        auto dest = pointOnCircle(center, SPAWN_RADIUS / 2, randfBtwn(0, 2 * PI));
         auto asteroid = new Asteroid(mass, pos);
-        asteroid->rb.applyVelocity(glm::normalize(dest - pos) * toVec2(randfBtwn(10, 35)));
+        pushInBounds(asteroid);
         asteroids.push_back(asteroid);
         asteroidsLoaded++;
-        loadNextAsteroidAt = t + (double) randfBtwn(0, powf(asteroids.size(), .5));
+        loadNextAsteroidAt = t + ((double) randfBtwn(0, powf(asteroids.size(), .5)) * 2);
     }
 
     void GameState::loadLevel() {
@@ -73,13 +78,9 @@ namespace Asteroid {
             if (asteroid->alive) {
                 if (!asteroid->rb.inBounds && fabsf(distance(asteroid->rb.pos, World::getInstance().center())) > SPAWN_RADIUS) {
                     // Catch asteroids that are moving further from the center rather than closer
-                    delete asteroid;
-                    toDelete.push_back(i);
-                    asteroidsLoaded--;
-                    addAsteroid(t);
-                } else {
-                    asteroid->step(*this, t, dt);
+                    pushInBounds(asteroid);
                 }
+                asteroid->step(*this, t, dt);
             } else {
                 float mass = asteroid->rb.mass / 2;
                 if (mass >= ASTEROID_MASS_MIN) {
