@@ -19,14 +19,14 @@ namespace Asteroid {
     class Asteroid : Renderable {
     public:
         GLuint shaderProgram;
-		Rigidbody rb;
-		Collider * coll;
-		bool alive;
+        Rigidbody rb;
+        Collider * coll;
+        bool alive;
 
         Asteroid(float mass, glm::vec2 pos);
         ~Asteroid();
 
-		void onCollision(Collider coll);
+        void onCollision(Collider coll);
 
         void step(GameState state, double t, double dt);
         void draw(GameState state);
@@ -34,7 +34,7 @@ namespace Asteroid {
     private:
         GLint direction, sizeRatio, radius, rotation, color;
         GLuint vao, vbo;
-		bool collided;
+        bool collided;
         void onWorldChange(World world);
     };
 }

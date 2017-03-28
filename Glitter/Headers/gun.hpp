@@ -15,15 +15,15 @@ namespace Asteroid {
         float bulletTimeToLive;
         float bulletsPerSecond;
         float cooldownRate;
-		float bulletMass;
-		float bulletForce;
+        float bulletMass;
+        float bulletForce;
 
-		Gun();
-		~Gun();
+        Gun();
+        ~Gun();
         bool fireBullet(double t, glm::vec2 vel, glm::vec2 pos);
         void step(GameState state, double t, double dt);
         void draw(GameState state);
-		void clearBullets();
+        void clearBullets();
 
     private:
         std::vector<Projectile *> bullets;

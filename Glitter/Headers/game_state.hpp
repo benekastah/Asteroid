@@ -16,18 +16,18 @@ namespace Asteroid {
         GLFWwindow * window;
         Player * player;
         Sidebar * sidebar;
-		std::vector<Asteroid *> asteroids;
-		unsigned int level;
+        std::vector<Asteroid *> asteroids;
+        unsigned int level;
 
         GameState(GLFWwindow * window);
 
-		void step(double t, double dt);
-		void draw();
-		void loadLevel();
-		void clearAsteroids();
+        void step(double t, double dt);
+        void draw();
+        void loadLevel();
+        void clearAsteroids();
 
-	private:
-		double resetAt;
-		double nextLevelAt;
+    private:
+        double resetAt;
+        double nextLevelAt;
     };
 }

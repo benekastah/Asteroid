@@ -4,25 +4,25 @@
 
 namespace Asteroid {
 
-	Gun::Gun() {
-		bulletMass = 25;
-		bulletForce = 125000;
-		maxBullets = 4;
-		bulletTimeToLive = 1;
-		bulletsPerSecond = 7;
-		cooldownRate = 0;
-	}
+    Gun::Gun() {
+        bulletMass = 25;
+        bulletForce = 125000;
+        maxBullets = 4;
+        bulletTimeToLive = 1;
+        bulletsPerSecond = 7;
+        cooldownRate = 0;
+    }
 
-	Gun::~Gun() {
-		clearBullets();
-	}
+    Gun::~Gun() {
+        clearBullets();
+    }
 
-	void Gun::clearBullets() {
-		for each (auto bullet in bullets) {
-			delete bullet;
-		}
-		bullets.clear();
-	}
+    void Gun::clearBullets() {
+        for each (auto bullet in bullets) {
+            delete bullet;
+        }
+        bullets.clear();
+    }
 
     bool Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
         static double lastFiredBulletAt = 0;
@@ -40,7 +40,7 @@ namespace Asteroid {
         lastFiredBulletAt = t;
         auto bullet = new Projectile(bulletMass, bulletForce, pos, vel);
         bullets.push_back(bullet);
-		return true;
+        return true;
     }
 
     void Gun::step(GameState state, double t, double dt) {
@@ -53,7 +53,7 @@ namespace Asteroid {
             }
         }
         for (int i = 0; i < toDelete.size(); i++) {
-			delete bullets[toDelete[i]];
+            delete bullets[toDelete[i]];
             bullets.erase(bullets.begin() + toDelete[i]);
         }
     }

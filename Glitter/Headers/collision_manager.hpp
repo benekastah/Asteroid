@@ -8,13 +8,13 @@
 
 namespace Asteroid {
 
-	class CollisionManager {
-	public:
-		std::set<Collider *> colliders;
+    class CollisionManager {
+    public:
+        std::set<Collider *> colliders;
 
-		static CollisionManager & getInstance();
-		void add(Collider * coll);
-		void remove(Collider * coll);
-		void collide();
-	};
+        static CollisionManager & getInstance();
+        void add(Collider * coll);
+        void remove(Collider * coll);
+        void collide();
+    };
 }

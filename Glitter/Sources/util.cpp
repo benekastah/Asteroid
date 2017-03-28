@@ -15,10 +15,10 @@ char* readFile(const char* fname) {
 
     FILE* f;
     errno_t err = fopen_s(&f, fname, "rb");
-	if (err != 0) {
-		fprintf(stderr, "Error reading file \"%s\"\n", fname);
-		exit(1);
-	}
+    if (err != 0) {
+        fprintf(stderr, "Error reading file \"%s\"\n", fname);
+        exit(1);
+    }
 
     if (f) {
         fseek(f, 0, SEEK_END);
@@ -43,8 +43,8 @@ float maxf(float a, float b) {
 }
 
 float scale(float min1, float max1, float min2, float max2, float val) {
-	float percent = (val - min1) / (max1 - min1);
-	return percent * (max2 - min2) + min2;
+    float percent = (val - min1) / (max1 - min1);
+    return percent * (max2 - min2) + min2;
 }
 
 void _srand() {
@@ -55,8 +55,8 @@ void _srand() {
 }
 
 float randf() {
-	_srand();
-	return (float) rand();
+    _srand();
+    return (float) rand();
 }
 
 float randfBtwn(float min, float max) {
@@ -64,19 +64,19 @@ float randfBtwn(float min, float max) {
 }
 
 glm::vec2 toVec2(float x) {
-	return glm::vec2(x, x);
+    return glm::vec2(x, x);
 }
 
 glm::vec2 randVec2() {
-	return randVec2(1);
+    return randVec2(1);
 }
 
 glm::vec2 randVec2(float magnitude) {
-	return glm::normalize(glm::vec2(randf(), randf())) * toVec2(magnitude);
+    return glm::normalize(glm::vec2(randf(), randf())) * toVec2(magnitude);
 }
 
 glm::vec2 randVec2(float min, float max) {
-	return glm::vec2(randfBtwn(min, max), randfBtwn(min, max));
+    return glm::vec2(randfBtwn(min, max), randfBtwn(min, max));
 }
 
 bool strEndsWith(const char * str, const char * ending) {

@@ -9,27 +9,27 @@
 
 namespace Asteroid {
 
-	enum ObjectType {
-		PLAYER, PROJECTILE, ASTEROID
-	};
+    enum ObjectType {
+        PLAYER, PROJECTILE, ASTEROID
+    };
 
-	class Collider {
-	public:
-		Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType);
-		~Collider();
+    class Collider {
+    public:
+        Collider(Rigidbody * mRb, float mRadius, enum ObjectType mType);
+        ~Collider();
 
-		Rigidbody * rb;
-		float radius;
-		enum ObjectType type;
-		bool enabled;
+        Rigidbody * rb;
+        float radius;
+        enum ObjectType type;
+        bool enabled;
 
-		bool intersects(const Collider coll);
-		void onCollision(const Collider coll);
-		void addCollisionCallback(std::function<void(const Collider)> cb);
-		void enable();
-		void disable();
+        bool intersects(const Collider coll);
+        void onCollision(const Collider coll);
+        void addCollisionCallback(std::function<void(const Collider)> cb);
+        void enable();
+        void disable();
 
-	private:
+    private:
         std::vector<std::function<void(const Collider)>> collisionCallbacks;
-	};
+    };
 }

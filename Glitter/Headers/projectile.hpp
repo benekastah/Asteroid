@@ -14,11 +14,11 @@ namespace Asteroid {
     class Projectile : Renderable {
     public:
         float startTime;
-		Rigidbody rb;
-		Collider * coll;
-		bool alive;
+        Rigidbody rb;
+        Collider * coll;
+        bool alive;
 
-		~Projectile();
+        ~Projectile();
         Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel);
 
         void step(GameState state, double t, double dt);
@@ -31,6 +31,6 @@ namespace Asteroid {
         GLuint vao, vbo;
         GLuint sizeRatio, radius;
 
-		void onCollide(const Collider coll);
+        void onCollide(const Collider coll);
     };
 }

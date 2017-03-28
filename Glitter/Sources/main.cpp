@@ -20,7 +20,7 @@ void render(GameState state) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-	state.draw();
+    state.draw();
 
     // Flip Buffers and Draw
     glfwSwapBuffers(state.window);
@@ -31,9 +31,9 @@ void updateState(GameState * state, double t, double dt) {
     if (glfwGetKey(state->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(state->window, true);
     }
-	CollisionManager::getInstance().collide();
-	
-	state->step(t, dt);
+    CollisionManager::getInstance().collide();
+    
+    state->step(t, dt);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

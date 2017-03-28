@@ -12,14 +12,14 @@
 #include "collider.hpp"
 
 namespace Asteroid {
-	class GameState;
+    class GameState;
 
     class Player : Renderable {
     public:
         GLuint shaderProgram;
-		Rigidbody rb;
-		Collider * coll;
-		bool alive;
+        Rigidbody rb;
+        Collider * coll;
+        bool alive;
         Gun gun;
 
         Player();
@@ -33,6 +33,6 @@ namespace Asteroid {
         GLuint vao, vbo;
 
         void onWorldChange(World world);
-		void onCollide(const Collider coll);
+        void onCollide(const Collider coll);
     };
 }
