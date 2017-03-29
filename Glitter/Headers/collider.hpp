@@ -30,5 +30,6 @@ namespace Asteroid {
 
     private:
         std::vector<std::function<void(const Collider)>> collisionCallbacks;
+        void applyCollisionForce(const Collider coll);
     };
 }

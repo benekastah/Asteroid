@@ -76,7 +76,7 @@ namespace Asteroid {
         for (int i = 0; i < asteroids.size(); i++) {
             auto asteroid = asteroids[i];
             if (asteroid->alive) {
-                if (!asteroid->rb.inBounds && fabsf(distance(asteroid->rb.pos, World::getInstance().center())) > SPAWN_RADIUS) {
+                if (!asteroid->rb.inBounds && distance(asteroid->rb.pos, World::getInstance().center()) > SPAWN_RADIUS) {
                     // Catch asteroids that are moving further from the center rather than closer
                     pushInBounds(asteroid);
                 }

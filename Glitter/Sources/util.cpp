@@ -84,7 +84,7 @@ glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir) {
 }
 
 float distance(glm::vec2 a, glm::vec2 b) {
-    return sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2));
+    return fabsf(sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2)));
 }
 
 bool strEndsWith(const char * str, const char * ending) {
