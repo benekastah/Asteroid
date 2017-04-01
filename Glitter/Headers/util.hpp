@@ -29,6 +29,8 @@ float wrappedDistance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
 float distance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
 glm::vec2 subtract(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
 
+float findRadius(float mass, float density);
+
 float minf(float a, float b);
 float maxf(float a, float b);
 

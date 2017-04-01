@@ -30,7 +30,7 @@ namespace Asteroid {
 
     void GameState::addAsteroid(double t) {
         auto center = World::getInstance().center();
-        float mass = randfBtwn(ASTEROID_MASS_MIN * 4, ASTEROID_MASS_MAX);
+        float mass = randfBtwn(ASTEROID_MASS_MAX / 3, ASTEROID_MASS_MAX);
         auto pos = pointOnCircle(center, SPAWN_RADIUS, randfBtwn(0, 2 * PI));
         auto asteroid = new Asteroid(mass, pos);
         pushInBounds(asteroid);
@@ -82,7 +82,7 @@ namespace Asteroid {
                 }
                 asteroid->step(*this, t, dt);
             } else {
-                float mass = asteroid->rb.mass / 2;
+                float mass = asteroid->rb.mass / 3;
                 if (mass >= ASTEROID_MASS_MIN) {
                     for (int i = 0; i < 2; i++) {
                         auto ast = new Asteroid(mass, asteroid->rb.pos);

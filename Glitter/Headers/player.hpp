@@ -11,6 +11,9 @@
 #include "rigidbody.hpp"
 #include "collider.hpp"
 
+#define PLAYER_DENSITY 608
+#define PLAYER_MASS 5000
+
 namespace Asteroid {
     class GameState;
 

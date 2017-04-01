@@ -10,11 +10,11 @@
 #include "collider.hpp"
 #include "world.hpp"
 
-#define ASTEROID_MASS_MIN 3000
-#define ASTEROID_MASS_MAX 30000
+#define ASTEROID_MASS_MIN 10000
+#define ASTEROID_MASS_MAX 1000000
 
-#define ASTEROID_RADIUS_MIN 1.5
-#define ASTEROID_RADIUS_MAX 9
+// in kg/m^3
+#define ASTEROID_DENSITY 1380
 
 namespace Asteroid {
     class GameState;

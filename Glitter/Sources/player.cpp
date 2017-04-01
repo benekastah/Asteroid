@@ -10,8 +10,8 @@ namespace Asteroid {
         alive = true;
         shaderProgram = createShaderProgram(
             shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"));
-        float r = 1.5;
-        rb = Rigidbody(5000, glm::vec2(50, 50), r);
+        float r = findRadius(PLAYER_MASS, PLAYER_DENSITY);
+        rb = Rigidbody(PLAYER_MASS, World::getInstance().center(), r);
         rb.maxVelocity = 100;
         coll = new Collider(&rb, PLAYER);
         coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1));

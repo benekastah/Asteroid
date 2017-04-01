@@ -10,7 +10,7 @@ namespace Asteroid {
         mMass = maxf(minf(mMass, ASTEROID_MASS_MAX), ASTEROID_MASS_MIN);
         shaderProgram = createShaderProgram(
             shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
-        float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, ASTEROID_RADIUS_MIN, ASTEROID_RADIUS_MAX, mMass);
+        float r = findRadius(mMass, ASTEROID_DENSITY);
         rb = Rigidbody(mMass, mPos, r);
         coll = new Collider(&rb, ASTEROID);
         coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));

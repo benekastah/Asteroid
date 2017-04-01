@@ -151,6 +151,15 @@ glm::vec2 subtract(glm::vec2 limit, glm::vec2 a, glm::vec2 b) {
     }
 }
 
+float findRadius(float mass, float density) {
+    // Derived from:
+    //   mass = volume * density
+    //   volume of sphere = (4 * PI * r^3) / 3
+    auto num = 3 * (1 / density * mass);
+    auto denum = 4 * PI;
+    return std::cbrtf(num / denum);
+}
+
 bool strEndsWith(const char * str, const char * ending) {
     int strL = strlen(str);
     int endingL = strlen(ending);
