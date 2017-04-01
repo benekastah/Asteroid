@@ -21,7 +21,7 @@ namespace Asteroid {
 
     void CollisionManager::applyCollisionForce(Collider * a, Collider * b) {
         // https://en.wikipedia.org/wiki/Coefficient_of_restitution
-        static const float restitution = 1;
+        static const float restitution = 0.8f;
 
         // http://stackoverflow.com/q/345838/777929 provided the following algorithm
         auto delta = subtract(WORLD_SIZE, a->rb->pos, b->rb->pos);
