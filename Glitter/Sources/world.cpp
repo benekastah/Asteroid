@@ -67,20 +67,6 @@ namespace Asteroid {
         return (2.0f / WORLD_WIDTH) * size;
     }
 
-    glm::vec2 World::wrapWorldCoord(glm::vec2 coord) {
-        // Add WORLD_WIDTH and WORLD_HEIGHT ahead of time for better branch prediction.
-        // Not sure if this matters, but it helps in theory.
-        coord.x = fmodf(WORLD_WIDTH + coord.x, WORLD_WIDTH);
-        coord.y = fmodf(WORLD_HEIGHT + coord.y, WORLD_HEIGHT);
-        while (coord.x < 0) {
-            coord.x += WORLD_WIDTH;
-        }
-        while (coord.y < 0) {
-            coord.y += WORLD_HEIGHT;
-        }
-        return coord;
-    }
-
     glm::vec2 World::getGlRatio() {
         return glRatio;
     }
@@ -99,14 +85,11 @@ namespace Asteroid {
         return buf;
     }
 
-    glm::vec2 World::randPos() {
-        return glm::vec2(
-            randfBtwn(0, WORLD_WIDTH),
-            randfBtwn(0, WORLD_HEIGHT)
-        );
+    glm::vec2 World::size() {
+        return glm::vec2(WORLD_WIDTH, WORLD_HEIGHT);
     }
 
     glm::vec2 World::center() {
-        return glm::vec2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        return size() / toVec2(2);
     }
 }

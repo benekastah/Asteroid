@@ -23,6 +23,7 @@ namespace Asteroid {
         bool enabled;
 
         bool intersects(const Collider coll);
+        bool interactsWith(const Collider coll);
         void onCollision(const Collider coll);
         void addCollisionCallback(std::function<void(const Collider)> cb);
         void enable();
@@ -30,6 +31,5 @@ namespace Asteroid {
 
     private:
         std::vector<std::function<void(const Collider)>> collisionCallbacks;
-        void applyCollisionForce(const Collider coll);
     };
 }

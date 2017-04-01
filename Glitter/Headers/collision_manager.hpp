@@ -16,5 +16,8 @@ namespace Asteroid {
         void add(Collider * coll);
         void remove(Collider * coll);
         void collide();
+
+    private:
+        void applyCollisionForce(Collider * a, Collider * b);
     };
 }

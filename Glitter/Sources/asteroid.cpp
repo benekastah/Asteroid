@@ -66,7 +66,7 @@ namespace Asteroid {
         float dir = atan2f(rb.velocity.y, rb.velocity.x);
         glUniform1f(direction, dir);
         if (collided) {
-            //glUniform4f(color, 1, 0, 0, 1);
+            glUniform4f(color, 1, 0, 0, 1);
             collided = false;
         } else {
             glUniform4f(color, 1, 1, 1, 1);

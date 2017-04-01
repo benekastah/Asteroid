@@ -1,0 +1,16 @@
+
+1d wrapped distance function:
+
+d1(l, a, b) = l/2 - |l/2 - (|a-b| % l)|
+
+Where d is distance, l is the limit (or maximum) of the axis (0 being the implicit minimum),
+a is one position and b is the other position.
+
+2d wrapped distance function:
+
+d2(l, a, b) = sqrt(d1(l.x, a.x, b.x)^2 + d1(l.y, a.y, b.y)^2)
+
+
+1d wrapped subtraction:
+
+s(l, a, b) = d1(l, a, b) * sgn(a - b)

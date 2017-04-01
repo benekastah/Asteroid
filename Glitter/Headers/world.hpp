@@ -30,12 +30,11 @@ namespace Asteroid {
         glm::mat2 glBounds();
         glm::vec2 worldCoordToViewCoord(glm::vec2 coord);
         float worldSizeToViewSize(float size);
-        glm::vec2 wrapWorldCoord(glm::vec2 coord);
         glm::vec2 getGlRatio();
         void addChangeCallback(std::function<void(World)> cb);
         struct positionBuffer getPositionBuffer(glm::vec2 pos);
-        glm::vec2 randPos();
         glm::vec2 center();
+        glm::vec2 size();
 
     private:
         glm::vec2 glRatio;

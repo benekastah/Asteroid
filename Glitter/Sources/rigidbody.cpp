@@ -5,6 +5,8 @@
 
 namespace Asteroid {
 
+    static const glm::vec2 WORLD_SIZE = World::getInstance().size();
+
     bool pointInBounds(glm::vec2 pt) {
         return pt.x >= 0 && pt.x < WORLD_WIDTH && pt.y >= 0 && pt.y < WORLD_HEIGHT;
     }
@@ -67,7 +69,7 @@ namespace Asteroid {
         pos.x += velocity.x * dt + 0.5 * acc.x * powf(dt, 2);
         pos.y += velocity.y * dt + 0.5 * acc.y * powf(dt, 2);
         if (inBounds) {
-            pos = World::getInstance().wrapWorldCoord(pos);
+            pos = wrap(WORLD_SIZE, pos);
         } else {
             // Once in bounds for the first time, the object remains in bounds.
             inBounds = circleInBounds(pos, radius);

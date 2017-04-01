@@ -83,8 +83,72 @@ glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir) {
     return pos + glm::vec2(r * cosf(dir), r * sinf(dir));
 }
 
-float distance(glm::vec2 a, glm::vec2 b) {
-    return fabsf(sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2)));
+glm::vec2 fmodf(glm::vec2 a, glm::vec2 b) {
+    a.x = fmodf(a.x, b.x);
+    a.y = fmodf(a.y, b.y);
+    return a;
+}
+
+glm::vec2 fabsf(glm::vec2 vec) {
+    vec.x = fabsf(vec.x);
+    vec.y = fabsf(vec.y);
+    return vec;
+}
+
+glm::vec2 wrap(glm::vec2 limit, glm::vec2 vec) {
+    return fabsf(fmodf(limit + vec, limit));
+}
+
+float wrappedDistance(float limit, float a, float b) {
+    // Describes distance between two positions in a geometry where it is only possible to travel to any
+    // position between [0, limit). When you reach either boundary, your position wraps around. So, if you
+    // are at position zero and you move backward one position, you will end up at position limit - 1.
+    return limit / 2 - fabsf(limit / 2 - fmodf(fabsf(a - b), limit));
+}
+
+float wrappedSubtract(float limit, float a, float b) {
+    return wrappedDistance(limit, a, b) * sgn(a - b);
+}
+
+glm::vec2 wrappedSubtract(glm::vec2 limit, glm::vec2 a, glm::vec2 b) {
+    auto sub = glm::vec2(
+        wrappedSubtract(limit.x, a.x, b.x),
+        wrappedSubtract(limit.y, a.y, b.y));
+    if (a - b != sub) {
+        return sub * toVec2(-1);
+    } else {
+        return sub;
+    }
+}
+
+float wrappedDistance(glm::vec2 limit, glm::vec2 a, glm::vec2 b) {
+    return glm::length(glm::vec2(
+        wrappedDistance(limit.x, a.x, b.x),
+        wrappedDistance(limit.y, a.y, b.y)));
+}
+
+bool isWrapped(float limit, float val) {
+    return val >= 0 && val < limit;
+}
+
+bool isWrapped(glm::vec2 limit, glm::vec2 val) {
+    return isWrapped(limit.x, val.x) && isWrapped(limit.y, val.y);
+}
+
+float distance(glm::vec2 limit, glm::vec2 a, glm::vec2 b) {
+    if (isWrapped(limit, a) && isWrapped(limit, b)) {
+        return wrappedDistance(limit, a, b);
+    } else {
+        return glm::distance(a, b);
+    }
+}
+
+glm::vec2 subtract(glm::vec2 limit, glm::vec2 a, glm::vec2 b) {
+    if (isWrapped(limit, a) && isWrapped(limit, b)) {
+        return wrappedSubtract(limit, a, b);
+    } else {
+        return a - b;
+    }
 }
 
 bool strEndsWith(const char * str, const char * ending) {

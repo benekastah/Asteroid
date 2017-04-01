@@ -9,6 +9,11 @@
 
 char* readFile(const char* fname);
 
+// Thanks, http://stackoverflow.com/a/495056/777929
+template <typename T> T sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 float scale(float min1, float max1, float min2, float max2, float val);
 void _srand();
 float randf();
@@ -19,7 +24,10 @@ glm::vec2 randVec2();
 glm::vec2 randVec2(float magnitude);
 glm::vec2 randVec2(float min, float max);
 glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir);
-float distance(glm::vec2 a, glm::vec2 b);
+glm::vec2 wrap(glm::vec2 limit, glm::vec2 vec);
+float wrappedDistance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
+float distance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
+glm::vec2 subtract(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
 
 float minf(float a, float b);
 float maxf(float a, float b);
