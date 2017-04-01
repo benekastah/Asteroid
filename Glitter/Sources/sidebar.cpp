@@ -1,7 +1,6 @@
 #include <functional>
 
 #include "sidebar.hpp"
-#include "game_state.hpp"
 #include "world.hpp"
 
 namespace Asteroid {
@@ -48,9 +47,9 @@ namespace Asteroid {
         glDeleteProgram(shaderProgram);
     }
 
-    void Sidebar::step(GameState state, double dt, double t) {}
+    void Sidebar::step(double dt, double t) {}
 
-    void Sidebar::draw(GameState state) {
+    void Sidebar::draw() {
         auto world = World::getInstance();
         glUseProgram(shaderProgram);
         glBindVertexArray(vao);

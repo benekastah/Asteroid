@@ -2,7 +2,6 @@
 
 #include <math.h>
 
-#include "world.hpp"
 #include "game_state.hpp"
 
 namespace Asteroid {
@@ -43,7 +42,7 @@ namespace Asteroid {
         delete coll;
     }
 
-    void Player::step(GameState state, double t, double dt) {
+    void Player::step(double t, double dt) {
         if (!alive) {
             coll->disable();
             return;
@@ -54,7 +53,7 @@ namespace Asteroid {
 
         const float maxForce = 50000 * 50;
         const float forcePerStep = maxForce / 10;
-        auto window = state.window;
+        auto window = GameState::getInstance()->window;
 
         auto force = glm::vec2(0, 0);
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -73,7 +72,7 @@ namespace Asteroid {
         force.y = minf(maxForce, maxf(-maxForce, force.y));
 
         rb.applyForce(force);
-        rb.step(state, t, dt);
+        rb.step(t, dt);
         float dir = atan2f(rb.velocity.y, rb.velocity.x);
         glUniform1f(direction, dir);
 
@@ -81,10 +80,10 @@ namespace Asteroid {
             gun.fireBullet(t, rb.velocity, rb.pos);
         }
 
-        gun.step(state, t, dt);
+        gun.step(t, dt);
     }
 
-    void Player::draw(GameState state) {
+    void Player::draw() {
         if (!alive) {
             return;
         }
@@ -97,7 +96,7 @@ namespace Asteroid {
         glBufferData(GL_ARRAY_BUFFER, sizeof(playerPos), &playerPos.buf, GL_STREAM_DRAW);
         glDrawArrays(GL_POINTS, 0, 9);
 
-        gun.draw(state);
+        gun.draw();
     }
 
     void Player::onWorldChange(World world) {

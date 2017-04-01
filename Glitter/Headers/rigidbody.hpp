@@ -5,7 +5,6 @@
 #include "game_object.hpp"
 
 namespace Asteroid {
-    class GameState;
 
     class Rigidbody : GameObject {
     public:
@@ -16,7 +15,7 @@ namespace Asteroid {
         void applyForce(glm::vec2 force);
         void applyVelocity(glm::vec2 vel);
         void applyPos(glm::vec2 pos);
-        void step(GameState state, double t, double dt);
+        void step(double t, double dt);
 
         float mass;
         float maxVelocity;

@@ -4,7 +4,23 @@ namespace Asteroid {
 
     static const float SPAWN_RADIUS = sqrtf(powf(WORLD_WIDTH / 2, 2) + powf(WORLD_HEIGHT / 2, 2));
 
+    static bool gameStateInitialized = false;
+    static GameState * state;
+
+    GameState * GameState::getInstance() {
+        if (!gameStateInitialized) {
+            throw std::exception("Can't get game state instance before it was initialized.");
+        } else {
+            return state;
+        }
+    }
+
     GameState::GameState(GLFWwindow * window) {
+        if (gameStateInitialized) {
+            throw std::exception("Can't have more than one game state at a time");
+        }
+        gameStateInitialized = true;
+        state = this;
         resetAt = 0;
         nextLevelAt = 0;
         this->window = window;
@@ -46,7 +62,7 @@ namespace Asteroid {
     }
 
     void GameState::step(double t, double dt) {
-        player->step(*this, t, dt);
+        player->step(t, dt);
 
         if (resetAt == 0 && !player->alive) {
             resetAt = t + PAUSE_BETWEEN_LEVELS;
@@ -80,7 +96,7 @@ namespace Asteroid {
                     // Catch asteroids that are moving further from the center rather than closer
                     pushInBounds(asteroid);
                 }
-                asteroid->step(*this, t, dt);
+                asteroid->step(t, dt);
             } else {
                 float mass = asteroid->rb.mass / 3;
                 if (mass >= ASTEROID_MASS_MIN) {
@@ -100,10 +116,10 @@ namespace Asteroid {
     }
 
     void GameState::draw() {
-        player->draw(*this);
+        player->draw();
         for each (auto asteroid in asteroids) {
-            asteroid->draw(*this);
+            asteroid->draw();
         }
-        sidebar->draw(*this);
+        sidebar->draw();
     }
 }

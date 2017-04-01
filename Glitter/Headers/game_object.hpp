@@ -8,10 +8,9 @@
 
 
 namespace Asteroid {
-    class GameState;
 
     class GameObject {
     public:
-        virtual void GameObject::step(GameState state, double t, double dt) = 0;
+        virtual void GameObject::step(double t, double dt) = 0;
     };
 }

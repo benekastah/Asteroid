@@ -21,8 +21,8 @@ namespace Asteroid {
         ~Projectile();
         Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel);
 
-        void step(GameState state, double t, double dt);
-        void draw(GameState state);
+        void step(double t, double dt);
+        void draw();
 
         void onWorldChange(World world);
 

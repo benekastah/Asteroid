@@ -16,8 +16,8 @@ namespace Asteroid {
         Sidebar();
         ~Sidebar();
 
-        void step(GameState state, double dt, double t);
-        void draw(GameState state);
+        void step(double dt, double t);
+        void draw();
         void onWorldChange(World world);
 
     private:

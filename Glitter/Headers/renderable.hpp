@@ -9,10 +9,9 @@
 
 
 namespace Asteroid {
-    class GameState;
 
     class Renderable : GameObject {
     public:
-        virtual void Renderable::draw(GameState state) = 0;
+        virtual void Renderable::draw() = 0;
     };
 }

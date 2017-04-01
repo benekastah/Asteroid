@@ -17,7 +17,6 @@
 #define ASTEROID_DENSITY 1380
 
 namespace Asteroid {
-    class GameState;
 
     class Asteroid : Renderable {
     public:
@@ -31,8 +30,8 @@ namespace Asteroid {
 
         void onCollision(Collider coll);
 
-        void step(GameState state, double t, double dt);
-        void draw(GameState state);
+        void step(double t, double dt);
+        void draw();
 
     private:
         GLint direction, sizeRatio, radius, rotation, color, warp;

@@ -1,7 +1,5 @@
 #include "gun.hpp"
 
-#include "game_state.hpp"
-
 namespace Asteroid {
 
     Gun::Gun() {
@@ -43,13 +41,13 @@ namespace Asteroid {
         return true;
     }
 
-    void Gun::step(GameState state, double t, double dt) {
+    void Gun::step(double t, double dt) {
         std::vector<int> toDelete;
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets[i]->startTime != 0 && t - bullets[i]->startTime >= bulletTimeToLive || !bullets[i]->alive) {
                 toDelete.insert(toDelete.begin(), i);
             } else {
-                bullets[i]->step(state, t, dt);
+                bullets[i]->step(t, dt);
             }
         }
         for (int i = 0; i < toDelete.size(); i++) {
@@ -58,9 +56,9 @@ namespace Asteroid {
         }
     }
 
-    void Gun::draw(GameState state) {
+    void Gun::draw() {
         for (int i = 0; i < bullets.size(); i++) {
-            bullets[i]->draw(state);
+            bullets[i]->draw();
         }
     }
 }

@@ -1,8 +1,6 @@
 #include <functional>
 
 #include "projectile.hpp"
-
-#include "game_state.hpp"
 #include "util.hpp"
 
 static GLuint projectileShader;
@@ -54,17 +52,17 @@ namespace Asteroid {
         World::getInstance().addChangeCallback(std::bind(&Projectile::onWorldChange, this, std::placeholders::_1));
     }
 
-    void Projectile::step(GameState state, double t, double dt) {
+    void Projectile::step(double t, double dt) {
         if (!alive) {
             return;
         }
         if (startTime == 0) {
             startTime = t;
         }
-        rb.step(state, t, dt);
+        rb.step(t, dt);
     }
 
-    void Projectile::draw(GameState state) {
+    void Projectile::draw() {
         if (!alive) {
             return;
         }

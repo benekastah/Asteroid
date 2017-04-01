@@ -15,7 +15,6 @@
 #define PLAYER_MASS 5000
 
 namespace Asteroid {
-    class GameState;
 
     class Player : Renderable {
     public:
@@ -28,8 +27,8 @@ namespace Asteroid {
         Player();
         ~Player();
 
-        void step(GameState state, double t, double dt);
-        void draw(GameState state);
+        void step(double t, double dt);
+        void draw();
 
     private:
         GLint direction, radius, sizeRatio;

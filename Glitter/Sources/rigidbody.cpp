@@ -1,7 +1,6 @@
 #include "rigidbody.hpp"
 
 #include "world.hpp"
-#include "game_state.hpp"
 
 namespace Asteroid {
 
@@ -57,7 +56,7 @@ namespace Asteroid {
         nextPos.second = mPos;
     }
 
-    void Rigidbody::step(GameState state, double t, double dt) {
+    void Rigidbody::step(double t, double dt) {
         if (nextVelocity.first) {
             nextVelocity.first = false;
             velocity = nextVelocity.second;

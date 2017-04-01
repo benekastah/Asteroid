@@ -2,8 +2,6 @@
 
 #include "btBulletDynamicsCommon.h"
 
-#include "game_state.hpp"
-
 namespace Asteroid {
     Asteroid::Asteroid(float mMass, glm::vec2 mPos) {
         alive = true;
@@ -63,14 +61,14 @@ namespace Asteroid {
         }
     }
 
-    void Asteroid::step(GameState state, double t, double dt) {
+    void Asteroid::step(double t, double dt) {
         if (!alive) {
             return;
         }
         glUseProgram(shaderProgram);
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        rb.step(state, t, dt);
+        rb.step(t, dt);
         float dir = atan2f(rb.velocity.y, rb.velocity.x);
         glUniform1f(direction, dir);
         if (collided) {
@@ -81,7 +79,7 @@ namespace Asteroid {
         }
     }
 
-    void Asteroid::draw(GameState state) {
+    void Asteroid::draw() {
         if (!alive) {
             return;
         }

@@ -21,8 +21,8 @@ namespace Asteroid {
         Gun();
         ~Gun();
         bool fireBullet(double t, glm::vec2 vel, glm::vec2 pos);
-        void step(GameState state, double t, double dt);
-        void draw(GameState state);
+        void step(double t, double dt);
+        void draw();
         void clearBullets();
 
     private:

@@ -19,6 +19,7 @@ namespace Asteroid {
         std::vector<Asteroid *> asteroids;
         unsigned int level;
 
+        static GameState * getInstance();
         GameState(GLFWwindow * window);
 
         void step(double t, double dt);
