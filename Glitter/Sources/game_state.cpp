@@ -10,7 +10,7 @@ namespace Asteroid {
         this->window = window;
         player = new Player();
         sidebar = new Sidebar();
-        level = 6;
+        level = 2;
         asteroidsLoaded = 0;
         loadLevel();
     }
