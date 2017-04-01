@@ -13,6 +13,9 @@
 #define ASTEROID_MASS_MIN 3000
 #define ASTEROID_MASS_MAX 30000
 
+#define ASTEROID_RADIUS_MIN 1.5
+#define ASTEROID_RADIUS_MAX 9
+
 namespace Asteroid {
     class GameState;
 
@@ -32,7 +35,7 @@ namespace Asteroid {
         void draw(GameState state);
 
     private:
-        GLint direction, sizeRatio, radius, rotation, color;
+        GLint direction, sizeRatio, radius, rotation, color, warp;
         GLuint vao, vbo;
         bool collided;
         void onWorldChange(World world);

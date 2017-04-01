@@ -10,7 +10,7 @@ namespace Asteroid {
         mMass = maxf(minf(mMass, ASTEROID_MASS_MAX), ASTEROID_MASS_MIN);
         shaderProgram = createShaderProgram(
             shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
-        float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, 1.5, 9, mMass);
+        float r = scale(ASTEROID_MASS_MIN, ASTEROID_MASS_MAX, ASTEROID_RADIUS_MIN, ASTEROID_RADIUS_MAX, mMass);
         rb = Rigidbody(mMass, mPos, r);
         coll = new Collider(&rb, ASTEROID);
         coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));
@@ -21,11 +21,19 @@ namespace Asteroid {
         radius = glGetUniformLocation(shaderProgram, "radius");
         rotation = glGetUniformLocation(shaderProgram, "rotation");
         color = glGetUniformLocation(shaderProgram, "color");
+        warp = glGetUniformLocation(shaderProgram, "warp");
 
         glUseProgram(shaderProgram);
         glUniform1f(rotation, 1);
         glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
         glUniform4f(color, 1, 1, 1, 1);
+
+        float warpVals[14] = {};
+        size_t warpValsSize = sizeof(warpVals) / sizeof(warpVals[0]);
+        for (int i = 0; i < warpValsSize; i++) {
+            warpVals[i] = roundf(randfBtwn(-1, 1));
+        }
+        glUniform1fv(warp, warpValsSize, warpVals);
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
