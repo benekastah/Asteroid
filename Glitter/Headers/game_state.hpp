@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "sidebar.hpp"
 #include "asteroid.hpp"
+#include "explosion.hpp"
 
 #define PAUSE_BETWEEN_LEVELS 2
 
@@ -17,6 +18,7 @@ namespace Asteroid {
         Player * player;
         Sidebar * sidebar;
         std::vector<Asteroid *> asteroids;
+        std::vector<Explosion *> explosions;
         unsigned int level;
 
         static GameState * getInstance();
@@ -26,6 +28,7 @@ namespace Asteroid {
         void draw();
         void loadLevel();
         void clearAsteroids();
+        void clearExplosions();
         void addAsteroid(double t);
 
     private:

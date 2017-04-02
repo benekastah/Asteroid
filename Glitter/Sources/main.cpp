@@ -86,8 +86,12 @@ int main(int argc, char * argv[]) {
 
     // Create Context and Load OpenGL Functions
     glfwMakeContextCurrent(mWindow);
+
     gladLoadGL();
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
     gameLoop(mWindow);
 

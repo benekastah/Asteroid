@@ -36,6 +36,7 @@ namespace Asteroid {
 
         glUseProgram(shaderProgram);
         glUniform1f(radius, World::getInstance().worldSizeToViewSize(r));
+        glUniform4f(glGetUniformLocation(shaderProgram, "color"), 1, 1, 1, 1);
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);

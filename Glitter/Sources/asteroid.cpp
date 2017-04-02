@@ -1,6 +1,7 @@
 #include "asteroid.hpp"
 
-#include "btBulletDynamicsCommon.h"
+#include "game_state.hpp"
+#include "explosion.hpp"
 
 namespace Asteroid {
     Asteroid::Asteroid(float mMass, glm::vec2 mPos) {
@@ -56,8 +57,9 @@ namespace Asteroid {
     void Asteroid::onCollision(const Collider other) {
         glUseProgram(shaderProgram);
         collided = true;
-        if (other.type == PROJECTILE) {
+        if (alive && other.type == PROJECTILE) {
             alive = false;
+            GameState::getInstance()->explosions.push_back(new Explosion(rb.pos, glm::vec4(76/255., 60/255., 50/255., 0.1), rb.mass * 2/3, ASTEROID_DENSITY, .5));
         }
     }
 

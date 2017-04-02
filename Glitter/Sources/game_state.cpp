@@ -38,6 +38,13 @@ namespace Asteroid {
         asteroids.clear();
     }
 
+    void GameState::clearExplosions() {
+        for each (auto explosion in explosions) {
+            delete explosion;
+        }
+        explosions.clear();
+    }
+
     void pushInBounds(Asteroid * asteroid) {
         auto center = World::getInstance().center();
         auto dest = pointOnCircle(center, SPAWN_RADIUS / 2, randfBtwn(0, 2 * PI));
@@ -57,6 +64,7 @@ namespace Asteroid {
 
     void GameState::loadLevel() {
         clearAsteroids();
+        clearExplosions();
         asteroidsLoaded = 0;
         loadNextAsteroidAt = 0;
     }
@@ -113,12 +121,29 @@ namespace Asteroid {
         for each (int i in toDelete) {
             asteroids.erase(asteroids.begin() + i);
         }
+
+        toDelete.clear();
+        for (int i = 0; i < explosions.size(); i++) {
+            auto explosion = explosions[i];
+            if (explosion->alive) {
+                explosion->step(t, dt);
+            } else {
+                delete explosion;
+                toDelete.insert(toDelete.begin(), i);
+            }
+        }
+        for each (int i in toDelete) {
+            explosions.erase(explosions.begin() + i);
+        }
     }
 
     void GameState::draw() {
         player->draw();
         for each (auto asteroid in asteroids) {
             asteroid->draw();
+        }
+        for each (auto explosion in explosions) {
+            explosion->draw();
         }
         sidebar->draw();
     }

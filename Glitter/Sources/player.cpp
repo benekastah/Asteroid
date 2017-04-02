@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "game_state.hpp"
+#include "explosion.hpp"
 
 namespace Asteroid {
     Player::Player() {
@@ -107,6 +108,9 @@ namespace Asteroid {
     }
 
     void Player::onCollide(const Collider other) {
+        if (alive) {
+            GameState::getInstance()->explosions.push_back(new Explosion(rb.pos, glm::vec4(1, 0.27f, 0, 0.4), PLAYER_MASS * 3, PLAYER_DENSITY, 0.75));
+        }
         alive = false;
     }
 }
