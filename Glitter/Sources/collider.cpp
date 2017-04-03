@@ -33,47 +33,30 @@ namespace Asteroid {
         }
     }
 
-    void Collider::addCollisionCallback(std::function<void(Collider)> cb) {
+    void Collider::addCollisionCallback(std::function<void(const Collider, const InteractionType)> cb) {
         collisionCallbacks.push_back(cb);
     }
-
-    //void translatePoints(glm::vec2 * a, glm::vec2 * b) {
-    //    auto diff = toVec2(50) - *a;
-    //    *a = *a + diff;
-    //    *b = *b + diff;
-    //}
-
-    //bool circlesIntersect(Rigidbody aRb, Rigidbody bRb) {
-    //    auto world = World::getInstance();
-    //    glm::vec2 aPos = aRb.pos;
-    //    glm::vec2 bPos = bRb.pos;
-    //    translatePoints(&aPos, &bPos);
-    //    if (aRb.inBounds) {
-    //        aPos = world.wrapWorldCoord(aPos);
-    //    }
-    //    if (bRb.inBounds) {
-    //        bPos = world.wrapWorldCoord(bPos);
-    //    }
-    //    return powf(aPos.x - bPos.x, 2) + powf(aPos.y - bPos.y, 2) <= powf(aRb.radius + bRb.radius, 2);
-    //}
 
     bool Collider::intersects(const Collider coll) {
         auto d = distance(WORLD_SIZE, rb->pos, coll.rb->pos);
         return distance(WORLD_SIZE, rb->pos, coll.rb->pos) < rb->radius + coll.rb->radius;
     }
 
-    bool Collider::interactsWith(const Collider coll) {
+    InteractionType Collider::getInteractionType(const Collider coll) {
         if (type == PROJECTILE && coll.type == PLAYER ||
             type == PLAYER && coll.type == PROJECTILE ||
             type == PROJECTILE && coll.type == PROJECTILE) {
-            return false;
+            return NONE;
         }
-        return true;
+        if (type == CROSSHAIR || coll.type == CROSSHAIR) {
+            return DETECT;
+        }
+        return COLLIDE;
     }
 
-    void Collider::onCollision(const Collider coll) {
+    void Collider::onCollision(const Collider coll, const InteractionType t) {
         for each (auto cb in collisionCallbacks) {
-            cb(coll);
+            cb(coll, t);
         }
     }
 }

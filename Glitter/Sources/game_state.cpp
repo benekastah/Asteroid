@@ -26,6 +26,7 @@ namespace Asteroid {
         this->window = window;
         player = new Player();
         sidebar = new Sidebar();
+        crosshair = new Crosshair();
         level = 2;
         asteroidsLoaded = 0;
         loadLevel();
@@ -135,6 +136,8 @@ namespace Asteroid {
         for each (int i in toDelete) {
             explosions.erase(explosions.begin() + i);
         }
+
+        crosshair->step(t, dt);
     }
 
     void GameState::draw() {
@@ -146,5 +149,6 @@ namespace Asteroid {
             explosion->draw();
         }
         sidebar->draw();
+        crosshair->draw();
     }
 }

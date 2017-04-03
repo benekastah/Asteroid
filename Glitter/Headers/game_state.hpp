@@ -7,6 +7,7 @@
 #include "sidebar.hpp"
 #include "asteroid.hpp"
 #include "explosion.hpp"
+#include "crosshair.hpp"
 
 #define PAUSE_BETWEEN_LEVELS 2
 
@@ -17,6 +18,7 @@ namespace Asteroid {
         GLFWwindow * window;
         Player * player;
         Sidebar * sidebar;
+        Crosshair * crosshair;
         std::vector<Asteroid *> asteroids;
         std::vector<Explosion *> explosions;
         unsigned int level;

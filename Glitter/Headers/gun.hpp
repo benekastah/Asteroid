@@ -20,7 +20,7 @@ namespace Asteroid {
 
         Gun();
         ~Gun();
-        bool fireBullet(double t, glm::vec2 vel, glm::vec2 pos);
+        bool fireBullet(double t, glm::vec2 vel, glm::vec2 pos, glm::vec2 aim);
         void step(double t, double dt);
         void draw();
         void clearBullets();

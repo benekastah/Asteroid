@@ -12,7 +12,7 @@ namespace Asteroid {
         delete coll;
     }
 
-    Projectile::Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel) {
+    Projectile::Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel, glm::vec2 aim) {
         alive = true;
         if (!shaderInitialized) {
             projectileShader = createShaderProgram(
@@ -26,9 +26,9 @@ namespace Asteroid {
             vel.x = 1;
         }
         rb.applyVelocity(vel);
-        rb.applyForce(glm::normalize(vel) * glm::vec2(force, force));
+        rb.applyForce(glm::normalize(aim) * glm::vec2(force, force));
         coll = new Collider(&rb, PROJECTILE);
-        coll->addCollisionCallback(std::bind(&Projectile::onCollide, this, std::placeholders::_1));
+        coll->addCollisionCallback(std::bind(&Projectile::onCollide, this, std::placeholders::_1, std::placeholders::_2));
         coll->enable();
         sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
         radius = glGetUniformLocation(shaderProgram, "radius");
@@ -84,7 +84,10 @@ namespace Asteroid {
         glUniform2f(sizeRatio, world.getGlRatio().x, world.getGlRatio().y);
     }
 
-    void Projectile::onCollide(const Collider other) {
+    void Projectile::onCollide(const Collider other, const InteractionType t) {
+        if (t != COLLIDE) {
+            return;
+        }
         alive = false;
     }
 }

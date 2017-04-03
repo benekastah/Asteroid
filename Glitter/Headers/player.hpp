@@ -14,6 +14,9 @@
 #define PLAYER_DENSITY 608
 #define PLAYER_MASS 5000
 
+// The velocity at which the player can be considered stopped
+#define PLAYER_STOP_VELOCITY 0.3
+
 namespace Asteroid {
 
     class Player : Renderable {
@@ -23,6 +26,7 @@ namespace Asteroid {
         Collider * coll;
         bool alive;
         Gun gun;
+        glm::vec2 aim;
 
         Player();
         ~Player();
@@ -31,10 +35,10 @@ namespace Asteroid {
         void draw();
 
     private:
-        GLint direction, radius, sizeRatio;
+        GLint directionUniform, radius, sizeRatio;
         GLuint vao, vbo;
 
         void onWorldChange(World world);
-        void onCollide(const Collider coll);
+        void onCollide(const Collider coll, const InteractionType t);
     };
 }

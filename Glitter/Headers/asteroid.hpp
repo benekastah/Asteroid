@@ -36,7 +36,6 @@ namespace Asteroid {
     private:
         GLint direction, sizeRatio, radius, rotation, color, warp;
         GLuint vao, vbo;
-        bool collided;
         void onWorldChange(World world);
     };
 }

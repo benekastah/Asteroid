@@ -81,10 +81,13 @@ namespace Asteroid {
             for (++jt; jt != colliders.end(); ++jt) {
                 auto a = *it;
                 auto b = *jt;
-                if (a->interactsWith(*b) && a->intersects(*b)) {
-                    applyCollisionForce(a, b);
-                    a->onCollision(*b);
-                    b->onCollision(*a);
+                InteractionType t = a->getInteractionType(*b);
+                if (t != NONE && a->intersects(*b)) {
+                    if (t == COLLIDE) {
+                        applyCollisionForce(a, b);
+                    }
+                    a->onCollision(*b, t);
+                    b->onCollision(*a, t);
                 }
             }
         }

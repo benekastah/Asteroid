@@ -7,30 +7,29 @@
 #include "util.hpp"
 #include "renderable.hpp"
 #include "world.hpp"
-#include "collider.hpp"
 #include "rigidbody.hpp"
+#include "collider.hpp"
 
 namespace Asteroid {
-    class Projectile : Renderable {
+    class Crosshair : Renderable {
     public:
-        float startTime;
+        GLuint shaderProgram;
         Rigidbody rb;
         Collider * coll;
-        bool alive;
 
-        ~Projectile();
-        Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel, glm::vec2 aim);
+        Crosshair();
+        ~Crosshair();
 
         void step(double t, double dt);
         void draw();
-
         void onWorldChange(World world);
 
     private:
-        GLuint shaderProgram;
         GLuint vao, vbo;
-        GLuint sizeRatio, radius;
+        glm::vec4 color;
+        bool onEnemy;
+        GLint sizeRatio, colorUniform;
 
-        void onCollide(const Collider coll, const InteractionType t);
+        void onCollide(const Collider other, const InteractionType t);
     };
 }

@@ -24,6 +24,8 @@ glm::vec2 randVec2();
 glm::vec2 randVec2(float magnitude);
 glm::vec2 randVec2(float min, float max);
 glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir);
+glm::vec2 vec2Mod(glm::vec2 a, glm::vec2 b);
+glm::vec2 vec2Abs(glm::vec2 vec);
 glm::vec2 wrap(glm::vec2 limit, glm::vec2 vec);
 float wrappedDistance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);
 float distance(glm::vec2 limit, glm::vec2 a, glm::vec2 b);

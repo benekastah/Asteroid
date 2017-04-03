@@ -4,10 +4,10 @@ namespace Asteroid {
 
     Gun::Gun() {
         bulletMass = 25;
-        bulletForce = 125000;
-        maxBullets = 4;
-        bulletTimeToLive = 1;
-        bulletsPerSecond = 7;
+        bulletForce = 250000;
+        maxBullets = 5;
+        bulletTimeToLive = 0.6;
+        bulletsPerSecond = 2.5;
         cooldownRate = 0;
     }
 
@@ -22,7 +22,7 @@ namespace Asteroid {
         bullets.clear();
     }
 
-    bool Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos) {
+    bool Gun::fireBullet(double t, glm::vec2 vel, glm::vec2 pos, glm::vec2 aim) {
         static double lastFiredBulletAt = 0;
         static double maxedOutAt = 0;
         if (t - lastFiredBulletAt < 1 / bulletsPerSecond) {
@@ -36,7 +36,7 @@ namespace Asteroid {
             return false;
         }
         lastFiredBulletAt = t;
-        auto bullet = new Projectile(bulletMass, bulletForce, pos, vel);
+        auto bullet = new Projectile(bulletMass, bulletForce, pos, vel, aim);
         bullets.push_back(bullet);
         return true;
     }

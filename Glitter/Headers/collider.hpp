@@ -10,7 +10,11 @@
 namespace Asteroid {
 
     enum ObjectType {
-        PLAYER, PROJECTILE, ASTEROID
+        PLAYER, PROJECTILE, ASTEROID, CROSSHAIR
+    };
+
+    enum InteractionType {
+        NONE, DETECT, COLLIDE
     };
 
     class Collider {
@@ -19,17 +23,17 @@ namespace Asteroid {
         ~Collider();
 
         Rigidbody * rb;
-        enum ObjectType type;
+        ObjectType type;
         bool enabled;
 
         bool intersects(const Collider coll);
-        bool interactsWith(const Collider coll);
-        void onCollision(const Collider coll);
-        void addCollisionCallback(std::function<void(const Collider)> cb);
+        InteractionType getInteractionType(const Collider coll);
+        void onCollision(const Collider coll, const InteractionType t);
+        void addCollisionCallback(std::function<void(const Collider, const InteractionType)> cb);
         void enable();
         void disable();
 
     private:
-        std::vector<std::function<void(const Collider)>> collisionCallbacks;
+        std::vector<std::function<void(const Collider, const InteractionType)>> collisionCallbacks;
     };
 }

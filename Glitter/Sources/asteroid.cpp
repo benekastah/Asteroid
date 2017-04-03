@@ -56,7 +56,6 @@ namespace Asteroid {
 
     void Asteroid::onCollision(const Collider other) {
         glUseProgram(shaderProgram);
-        collided = true;
         if (alive && other.type == PROJECTILE) {
             alive = false;
             GameState::getInstance()->explosions.push_back(new Explosion(rb.pos, glm::vec4(76/255., 60/255., 50/255., 0.1), rb.mass * 2/3, ASTEROID_DENSITY, .5));
@@ -73,12 +72,6 @@ namespace Asteroid {
         rb.step(t, dt);
         float dir = atan2f(rb.velocity.y, rb.velocity.x);
         glUniform1f(direction, dir);
-        if (collided) {
-            glUniform4f(color, 1, 0, 0, 1);
-            collided = false;
-        } else {
-            glUniform4f(color, 1, 1, 1, 1);
-        }
     }
 
     void Asteroid::draw() {

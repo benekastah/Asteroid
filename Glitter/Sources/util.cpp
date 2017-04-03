@@ -83,20 +83,20 @@ glm::vec2 pointOnCircle(glm::vec2 pos, float r, float dir) {
     return pos + glm::vec2(r * cosf(dir), r * sinf(dir));
 }
 
-glm::vec2 fmodf(glm::vec2 a, glm::vec2 b) {
+glm::vec2 vec2Mod(glm::vec2 a, glm::vec2 b) {
     a.x = fmodf(a.x, b.x);
     a.y = fmodf(a.y, b.y);
     return a;
 }
 
-glm::vec2 fabsf(glm::vec2 vec) {
+glm::vec2 vec2Abs(glm::vec2 vec) {
     vec.x = fabsf(vec.x);
     vec.y = fabsf(vec.y);
     return vec;
 }
 
 glm::vec2 wrap(glm::vec2 limit, glm::vec2 vec) {
-    return fabsf(fmodf(limit + vec, limit));
+    return vec2Abs(vec2Mod(limit + vec, limit));
 }
 
 float wrappedDistance(float limit, float a, float b) {

@@ -21,6 +21,7 @@ namespace Asteroid {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         world.setWindowSize(width, height);
+        world.window = window;
         instance = world;
 
         worldTransforms[0] = glm::vec2(-WORLD_WIDTH, WORLD_HEIGHT);
@@ -61,6 +62,13 @@ namespace Asteroid {
             (glMax.x - glMin.x) / WORLD_WIDTH * coord.x + glMin.x,
             (glMax.y - glMin.y) / WORLD_HEIGHT * coord.y + glMin.y
         );
+    }
+
+    glm::vec2 World::getMousePos() {
+        double x, y;
+        glfwGetCursorPos(window, &x, &y);
+        y = winHeight - y;
+        return glm::vec2(scale(0, winWidth, 0, WORLD_WIDTH, x), scale(0, winHeight, 0, WORLD_HEIGHT, y));
     }
 
     float World::worldSizeToViewSize(float size) {

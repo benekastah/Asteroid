@@ -21,6 +21,7 @@ namespace Asteroid {
     public:
         int winWidth;
         int winHeight;
+        GLFWwindow * window;
 
         static World getInstance();
         static void setInstance(GLFWwindow * window);
@@ -29,6 +30,7 @@ namespace Asteroid {
 
         glm::mat2 glBounds();
         glm::vec2 worldCoordToViewCoord(glm::vec2 coord);
+        glm::vec2 getMousePos();
         float worldSizeToViewSize(float size);
         glm::vec2 getGlRatio();
         void addChangeCallback(std::function<void(World)> cb);

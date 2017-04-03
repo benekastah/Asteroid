@@ -14,9 +14,9 @@ namespace Asteroid {
         rb = Rigidbody(PLAYER_MASS, World::getInstance().center(), r);
         rb.maxVelocity = 100;
         coll = new Collider(&rb, PLAYER);
-        coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1));
+        coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1, std::placeholders::_2));
         coll->enable();
-        direction = glGetUniformLocation(shaderProgram, "direction");
+        directionUniform = glGetUniformLocation(shaderProgram, "direction");
         radius = glGetUniformLocation(shaderProgram, "radius");
         sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
 
@@ -52,33 +52,42 @@ namespace Asteroid {
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        const float maxForce = 50000 * 50;
-        const float forcePerStep = maxForce / 10;
+        auto mousePos = World::getInstance().getMousePos();
+        aim = glm::normalize(mousePos - rb.pos);
+        float dir = atan2f(aim.y, aim.x);
+        glUniform1f(directionUniform, dir);
+
+        const float forcePerStep = 750000 / 2;
         auto window = GameState::getInstance()->window;
 
-        auto force = glm::vec2(0, 0);
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            force.y += forcePerStep;
+        bool up = glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
+        bool left = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+        bool down = glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+        bool right = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+
+        glm::vec2 force;
+        if (up || down || left || right) {
+            force = glm::vec2(right - left, up - down);
+            if (glm::length(force) != 0) {
+                force = glm::normalize(force) * toVec2(forcePerStep);
+            }
+        } else if (glm::length(rb.velocity) != 0) {
+            // Apply stopping force
+            auto deltaVel = (rb.velocity - toVec2(PLAYER_STOP_VELOCITY) * glm::normalize(rb.velocity)) * toVec2(-1);
+            auto stopForce = toVec2(rb.mass) * (deltaVel / (float) dt);
+            if (glm::length(stopForce) != 0) {
+                force = glm::normalize(stopForce) * toVec2(forcePerStep);
+                if (glm::length(force) > glm::length(stopForce)) {
+                    force = stopForce;
+                }
+            }
         }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            force.y -= forcePerStep;
-        }
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            force.x -= forcePerStep;
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            force.x += forcePerStep;
-        }
-        force.x = minf(maxForce, maxf(-maxForce, force.x));
-        force.y = minf(maxForce, maxf(-maxForce, force.y));
 
         rb.applyForce(force);
         rb.step(t, dt);
-        float dir = atan2f(rb.velocity.y, rb.velocity.x);
-        glUniform1f(direction, dir);
 
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-            gun.fireBullet(t, rb.velocity, rb.pos);
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+            gun.fireBullet(t, rb.velocity, rb.pos, aim);
         }
 
         gun.step(t, dt);
@@ -107,9 +116,12 @@ namespace Asteroid {
         glUniform2f(sizeRatio, world.getGlRatio().x, world.getGlRatio().y);
     }
 
-    void Player::onCollide(const Collider other) {
+    void Player::onCollide(const Collider other, const InteractionType t) {
+        if (t != COLLIDE) {
+            return;
+        }
         if (alive) {
-            GameState::getInstance()->explosions.push_back(new Explosion(rb.pos, glm::vec4(1, 0.27f, 0, 0.4), PLAYER_MASS * 3, PLAYER_DENSITY, 0.75));
+            GameState::getInstance()->explosions.push_back(new Explosion(rb.pos, glm::vec4(1, 0.0f, 0, 0.6), PLAYER_MASS * 3, PLAYER_DENSITY, 0.75));
         }
         alive = false;
     }
