@@ -12,6 +12,6 @@ namespace Asteroid {
 
     class Renderable : GameObject {
     public:
-        virtual void Renderable::draw() = 0;
+        virtual void draw() = 0;
     };
 }

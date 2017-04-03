@@ -9,7 +9,7 @@ namespace Asteroid {
 
     GameState * GameState::getInstance() {
         if (!gameStateInitialized) {
-            throw std::exception("Can't get game state instance before it was initialized.");
+            throw "Can't get game state instance before it was initialized.";
         } else {
             return state;
         }
@@ -17,7 +17,7 @@ namespace Asteroid {
 
     GameState::GameState(GLFWwindow * window) {
         if (gameStateInitialized) {
-            throw std::exception("Can't have more than one game state at a time");
+            throw "Can't have more than one game state at a time";
         }
         gameStateInitialized = true;
         state = this;
@@ -33,14 +33,14 @@ namespace Asteroid {
     }
 
     void GameState::clearAsteroids() {
-        for each (auto asteroid in asteroids) {
+        for (auto asteroid : asteroids) {
             delete asteroid;
         }
         asteroids.clear();
     }
 
     void GameState::clearExplosions() {
-        for each (auto explosion in explosions) {
+        for (auto explosion : explosions) {
             delete explosion;
         }
         explosions.clear();
@@ -119,7 +119,7 @@ namespace Asteroid {
                 toDelete.insert(toDelete.begin(), i);
             }
         }
-        for each (int i in toDelete) {
+        for (int i : toDelete) {
             asteroids.erase(asteroids.begin() + i);
         }
 
@@ -133,7 +133,7 @@ namespace Asteroid {
                 toDelete.insert(toDelete.begin(), i);
             }
         }
-        for each (int i in toDelete) {
+        for (int i : toDelete) {
             explosions.erase(explosions.begin() + i);
         }
 
@@ -142,10 +142,10 @@ namespace Asteroid {
 
     void GameState::draw() {
         player->draw();
-        for each (auto asteroid in asteroids) {
+        for (auto asteroid : asteroids) {
             asteroid->draw();
         }
-        for each (auto explosion in explosions) {
+        for (auto explosion : explosions) {
             explosion->draw();
         }
         sidebar->draw();

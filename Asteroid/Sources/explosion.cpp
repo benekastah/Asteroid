@@ -63,7 +63,7 @@ namespace Asteroid {
 
     Explosion::~Explosion() {
         glDeleteProgram(shaderProgram);
-        for each (auto rb in balls) {
+        for (auto rb : balls) {
             delete rb;
         }
     }
@@ -81,7 +81,7 @@ namespace Asteroid {
         radius = findRadius(mass, density);
         glUniform1f(radiusUniform, World::getInstance().worldSizeToViewSize(radius));
         if (alive) {
-            for each (auto rb in balls) {
+            for (auto rb : balls) {
                 rb->step(t, dt);
                 rb->radius = radius;
             }
@@ -97,7 +97,7 @@ namespace Asteroid {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         std::vector<glm::vec2> buf;
-        for each (auto rb in balls) {
+        for (auto rb : balls) {
             glm::vec2 viewPos = World::getInstance().worldCoordToViewCoord(rb->pos);
             buf.push_back(viewPos);
         }

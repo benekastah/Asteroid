@@ -9,6 +9,20 @@
 
 #define MAX_NUM_SHADERS 100
 
+#ifdef __APPLE__
+
+typedef int errno_t;
+
+errno_t fopen_s(FILE ** streamptr, const char * filename, const char * mode) {
+    *streamptr = fopen(filename, mode);
+    if (!streamptr) {
+        return 1;
+    }
+    return 0;
+}
+
+#endif
+
 char* readFile(const char* fname) {
     char* buffer = NULL;
     long length;

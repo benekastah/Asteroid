@@ -55,7 +55,7 @@ namespace Asteroid {
     }
 
     void Collider::onCollision(const Collider coll, const InteractionType t) {
-        for each (auto cb in collisionCallbacks) {
+        for (auto cb : collisionCallbacks) {
             cb(coll, t);
         }
     }

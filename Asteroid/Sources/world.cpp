@@ -43,7 +43,7 @@ namespace Asteroid {
             height > width ? (float) width / (float) height : 1
         );
 
-        for each (std::function<void(World)> cb in changeCallbacks) {
+        for (std::function<void(World)> cb : changeCallbacks) {
             cb(*this);
         }
     }

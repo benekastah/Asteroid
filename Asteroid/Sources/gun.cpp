@@ -16,7 +16,7 @@ namespace Asteroid {
     }
 
     void Gun::clearBullets() {
-        for each (auto bullet in bullets) {
+        for (auto bullet : bullets) {
             delete bullet;
         }
         bullets.clear();

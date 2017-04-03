@@ -11,6 +11,6 @@ namespace Asteroid {
 
     class GameObject {
     public:
-        virtual void GameObject::step(double t, double dt) = 0;
+        virtual void step(double t, double dt) = 0;
     };
 }
