@@ -76,7 +76,14 @@ int main(int argc, char * argv[]) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
+
+#ifdef FULLSCREEN
+    auto primaryMonitor = glfwGetPrimaryMonitor();
+    auto mode = glfwGetVideoMode(primaryMonitor);
+    auto mWindow = glfwCreateWindow(mode->width, mode->height, PROJECT_TITLE, primaryMonitor, nullptr);
+#else
+    auto mWindow = glfwCreateWindow(mWidth, mHeight, PROJECT_TITLE, nullptr, nullptr);
+#endif
     glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Check for Valid Context
