@@ -9,7 +9,7 @@ namespace Asteroid {
     Player::Player() {
         alive = true;
         shaderProgram = createShaderProgram(
-            shaderFile("player.vert"), shaderFile("player.geo"), shaderFile("player.frag"));
+            shaderFile("player.vert"), shaderFile("player.geom"), shaderFile("player.frag"));
         float r = findRadius(PLAYER_MASS, PLAYER_DENSITY);
         rb = Rigidbody(PLAYER_MASS, World::getInstance().center(), r);
         rb.maxVelocity = 100;
@@ -52,7 +52,7 @@ namespace Asteroid {
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        auto mousePos = World::getInstance().getMousePos();
+        auto mousePos = wrap(World::getInstance().size(), World::getInstance().getMousePos());
         aim = glm::normalize(mousePos - rb.pos);
         float dir = atan2f(aim.y, aim.x);
         glUniform1f(directionUniform, dir);

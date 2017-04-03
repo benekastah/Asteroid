@@ -8,7 +8,7 @@ namespace Asteroid {
         alive = true;
         mMass = maxf(minf(mMass, ASTEROID_MASS_MAX), ASTEROID_MASS_MIN);
         shaderProgram = createShaderProgram(
-            shaderFile("asteroid.vert"), shaderFile("asteroid.geo"), shaderFile("asteroid.frag"));
+            shaderFile("asteroid.vert"), shaderFile("asteroid.geom"), shaderFile("asteroid.frag"));
         float r = findRadius(mMass, ASTEROID_DENSITY);
         rb = Rigidbody(mMass, mPos, r);
         coll = new Collider(&rb, ASTEROID);

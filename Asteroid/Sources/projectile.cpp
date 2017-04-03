@@ -16,7 +16,7 @@ namespace Asteroid {
         alive = true;
         if (!shaderInitialized) {
             projectileShader = createShaderProgram(
-                shaderFile("projectile.vert"), shaderFile("projectile.geo"), shaderFile("projectile.frag"));
+                shaderFile("projectile.vert"), shaderFile("projectile.geom"), shaderFile("projectile.frag"));
             shaderInitialized = true;
         }
         shaderProgram = projectileShader;

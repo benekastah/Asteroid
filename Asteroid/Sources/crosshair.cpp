@@ -7,7 +7,7 @@
 namespace Asteroid {
     Crosshair::Crosshair() {
         shaderProgram = createShaderProgram(
-            shaderFile("crosshair.vert"), shaderFile("crosshair.geo"), shaderFile("crosshair.frag"));
+            shaderFile("crosshair.vert"), shaderFile("crosshair.geom"), shaderFile("crosshair.frag"));
         sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
         colorUniform = glGetUniformLocation(shaderProgram, "color");
 

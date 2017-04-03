@@ -242,7 +242,7 @@ GLuint _createShaderProgram(const char * name, ...) {
             shader = createShader(GL_FRAGMENT_SHADER, name);
         } else if (strEndsWith(name, ".vert")) {
             shader = createShader(GL_VERTEX_SHADER, name);
-        } else if (strEndsWith(name, ".geo")) {
+        } else if (strEndsWith(name, ".geom")) {
             shader = createShader(GL_GEOMETRY_SHADER, name);
         }
         if (shader != 0) {

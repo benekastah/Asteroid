@@ -14,7 +14,7 @@ namespace Asteroid {
         startTime = 0;
 
         shaderProgram = createShaderProgram(
-            shaderFile("explosion.vert"), shaderFile("explosion.geo"), shaderFile("explosion.frag"));
+            shaderFile("explosion.vert"), shaderFile("explosion.geom"), shaderFile("explosion.frag"));
 
         colorUniform = glGetUniformLocation(shaderProgram, "color");
         radiusUniform = glGetUniformLocation(shaderProgram, "radius");

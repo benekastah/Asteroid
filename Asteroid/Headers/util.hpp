@@ -38,7 +38,7 @@ float maxf(float a, float b);
 
 void print_gl_errors();
 
-#define shaderFile(name) (PROJECT_SOURCE_DIR "/Glitter/Shaders/" name)
+#define shaderFile(name) (PROJECT_SOURCE_DIR "/Asteroid/Shaders/" name)
 GLuint createShader(GLenum type, const char * fname);
 #define createShaderProgram(...) (_createShaderProgram(__VA_ARGS__, nullptr))
 GLuint _createShaderProgram(const char * name, ...);
