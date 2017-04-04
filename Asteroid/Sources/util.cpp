@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include <math.h>
+#include <random>
 
 #include <glm/vec2.hpp>
 
@@ -61,20 +62,17 @@ float scale(float min1, float max1, float min2, float max2, float val) {
     return percent * (max2 - min2) + min2;
 }
 
-void _srand() {
-    static bool initialized = false;
-    if (!initialized) {
-        srand((unsigned int)(glfwGetTime() * 1e9));
-    }
-}
-
-float randf() {
-    _srand();
-    return (float) rand();
-}
+std::random_device seed;
+std::default_random_engine gen(seed());
 
 float randfBtwn(float min, float max) {
-    return scale(0, RAND_MAX, min, max, randf());
+    std::uniform_real_distribution<float> dist(min, max);
+    return dist(gen);
+}
+
+int randiBtwn(int min, int max) {
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(gen);
 }
 
 glm::vec2 toVec2(float x) {
@@ -86,7 +84,7 @@ glm::vec2 randVec2() {
 }
 
 glm::vec2 randVec2(float magnitude) {
-    return glm::normalize(glm::vec2(randf(), randf())) * toVec2(magnitude);
+    return glm::normalize(glm::vec2(randfBtwn(0, 1), randfBtwn(0, 1))) * toVec2(magnitude);
 }
 
 glm::vec2 randVec2(float min, float max) {

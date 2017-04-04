@@ -15,9 +15,8 @@ template <typename T> T sgn(T val) {
 }
 
 float scale(float min1, float max1, float min2, float max2, float val);
-void _srand();
-float randf();
 float randfBtwn(float min, float max);
+int randiBtwn(int min, int max);
 
 glm::vec2 toVec2(float x);
 glm::vec2 randVec2();
