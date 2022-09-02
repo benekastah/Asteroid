@@ -13,6 +13,27 @@ I got started with the really nice
 [Glitter](http://polytonic.github.io/Glitter/) project, which is a boilerplate
 for OpenGL projects. I've since removed unwanted dependencies.
 
+# Install
+
+```bash
+git clone --recursive git@github.com:benekastah/Asteroid.git
+cd Asteroid/Build
+cmake ..  # Produces a Makefile
+make
+Asteroid/Asteroid  # run the game
+```
+
+Above describes how to build the program using a unix Makefile, but we can generate Xcode or Visual Studio projects as well:
+
+```bash
+# Mac OSX
+cmake -G "Xcode" ..
+
+# Microsoft Windows
+cmake -G "Visual Studio 14" ..
+cmake -G "Visual Studio 14 Win64" ..
+```
+
 # Roadmap
 
 ## Powerups
