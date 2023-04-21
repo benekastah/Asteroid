@@ -14,7 +14,9 @@ namespace Asteroid {
         rb = Rigidbody(PLAYER_MASS, World::getInstance().center(), r);
         rb.maxVelocity = 100;
         coll = new Collider(&rb, PLAYER);
-        coll->addCollisionCallback(std::bind(&Player::onCollide, this, std::placeholders::_1, std::placeholders::_2));
+        coll->addCollisionCallback([&](auto other, auto t) {
+            onCollide(other, t);
+        });
         coll->enable();
         directionUniform = glGetUniformLocation(shaderProgram, "direction");
         radius = glGetUniformLocation(shaderProgram, "radius");
@@ -35,7 +37,9 @@ namespace Asteroid {
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         onWorldChange(World::getInstance());
-        World::getInstance().addChangeCallback(std::bind(&Player::onWorldChange, this, std::placeholders::_1));
+        World::getInstance().addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     Player::~Player() {

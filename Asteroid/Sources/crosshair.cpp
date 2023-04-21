@@ -14,7 +14,9 @@ namespace Asteroid {
         rb = Rigidbody(1, glm::vec2(0, 0), 1.3);
         coll = new Collider(&rb, CROSSHAIR);
         coll->enable();
-        coll->addCollisionCallback(std::bind(&Crosshair::onCollide, this, std::placeholders::_1, std::placeholders::_2));
+        coll->addCollisionCallback([&](auto other, auto t) {
+            onCollide(other, t);
+        });
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -32,7 +34,9 @@ namespace Asteroid {
 
         auto world = World::getInstance();
         onWorldChange(world);
-        world.addChangeCallback(std::bind(&Crosshair::onWorldChange, this, std::placeholders::_1));
+        world.addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     Crosshair::~Crosshair() {

@@ -40,7 +40,9 @@ namespace Asteroid {
 
         auto world = World::getInstance();
         onWorldChange(world);
-        world.addChangeCallback(std::bind(&Sidebar::onWorldChange, this, std::placeholders::_1));
+        world.addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     Sidebar::~Sidebar() {

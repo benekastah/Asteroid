@@ -28,7 +28,9 @@ namespace Asteroid {
         rb.applyVelocity(vel);
         rb.applyForce(glm::normalize(aim) * glm::vec2(force, force));
         coll = new Collider(&rb, PROJECTILE);
-        coll->addCollisionCallback(std::bind(&Projectile::onCollide, this, std::placeholders::_1, std::placeholders::_2));
+        coll->addCollisionCallback([&](auto other, auto t) {
+            onCollide(other, t);
+        });
         coll->enable();
         sizeRatio = glGetUniformLocation(shaderProgram, "sizeRatio");
         radius = glGetUniformLocation(shaderProgram, "radius");
@@ -50,7 +52,9 @@ namespace Asteroid {
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         onWorldChange(World::getInstance());
-        World::getInstance().addChangeCallback(std::bind(&Projectile::onWorldChange, this, std::placeholders::_1));
+        World::getInstance().addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     void Projectile::step(double t, double dt) {

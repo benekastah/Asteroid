@@ -58,7 +58,9 @@ namespace Asteroid {
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, vertexRowSize, 0);
 
         onWorldChange(world);
-        world.addChangeCallback(std::bind(&Explosion::onWorldChange, this, std::placeholders::_1));
+        world.addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     Explosion::~Explosion() {

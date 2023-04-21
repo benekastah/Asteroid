@@ -12,7 +12,9 @@ namespace Asteroid {
         float r = findRadius(mMass, ASTEROID_DENSITY);
         rb = Rigidbody(mMass, mPos, r);
         coll = new Collider(&rb, ASTEROID);
-        coll->addCollisionCallback(std::bind(&Asteroid::onCollision, this, std::placeholders::_1));
+        coll->addCollisionCallback([&](auto other, auto t) {
+            return onCollision(other);
+        });
         coll->enable();
 
         direction = glGetUniformLocation(shaderProgram, "direction");
@@ -46,7 +48,9 @@ namespace Asteroid {
         glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         onWorldChange(World::getInstance());
-        World::getInstance().addChangeCallback(std::bind(&Asteroid::onWorldChange, this, std::placeholders::_1));
+        World::getInstance().addChangeCallback([&](auto world) {
+            onWorldChange(world);
+        });
     }
 
     Asteroid::~Asteroid() {
