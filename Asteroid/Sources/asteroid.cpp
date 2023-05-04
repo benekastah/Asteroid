@@ -31,7 +31,7 @@ namespace Asteroid {
 
         float warpVals[14] = {};
         size_t warpValsSize = sizeof(warpVals) / sizeof(warpVals[0]);
-        for (int i = 0; i < warpValsSize; i++) {
+        for (size_t i = 0; i < warpValsSize; i++) {
             warpVals[i] = (float) randiBtwn(-1, 1);
         }
         glUniform1fv(warp, warpValsSize, warpVals);

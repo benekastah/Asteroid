@@ -29,7 +29,7 @@ namespace Asteroid {
         glm::vec2 aim;
 
         Player();
-        ~Player();
+        virtual ~Player();
 
         void step(double t, double dt);
         void draw();

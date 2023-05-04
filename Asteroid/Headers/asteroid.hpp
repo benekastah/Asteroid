@@ -26,7 +26,7 @@ namespace Asteroid {
         bool alive;
 
         Asteroid(float mass, glm::vec2 pos);
-        ~Asteroid();
+        virtual ~Asteroid();
 
         void onCollision(Collider coll);
 

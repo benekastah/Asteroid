@@ -15,7 +15,7 @@ namespace Asteroid {
         static float totalRadians = 2 * PI;
         static float advanceBy = totalRadians / numAngles;
         float dir = 0;
-        for (int i = 0; i < numAngles; i++) {
+        for (unsigned int i = 0; i < numAngles; i++) {
             if (!pointInBounds(pointOnCircle(pt, r, dir))) {
                 return false;
             }

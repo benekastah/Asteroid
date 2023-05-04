@@ -38,14 +38,13 @@ namespace Asteroid {
     }
 
     bool Collider::intersects(const Collider coll) {
-        auto d = distance(WORLD_SIZE, rb->pos, coll.rb->pos);
         return distance(WORLD_SIZE, rb->pos, coll.rb->pos) < rb->radius + coll.rb->radius;
     }
 
     InteractionType Collider::getInteractionType(const Collider coll) {
-        if (type == PROJECTILE && coll.type == PLAYER ||
-            type == PLAYER && coll.type == PROJECTILE ||
-            type == PROJECTILE && coll.type == PROJECTILE) {
+        if ((type == PROJECTILE && coll.type == PLAYER) ||
+            (type == PLAYER && coll.type == PROJECTILE) ||
+            (type == PROJECTILE && coll.type == PROJECTILE)) {
             return NONE;
         }
         if (type == CROSSHAIR || coll.type == CROSSHAIR) {

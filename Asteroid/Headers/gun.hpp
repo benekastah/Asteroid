@@ -11,7 +11,7 @@
 namespace Asteroid {
     class Gun : Renderable {
     public:
-        int maxBullets;
+        unsigned int maxBullets;
         float bulletTimeToLive;
         float bulletsPerSecond;
         float cooldownRate;

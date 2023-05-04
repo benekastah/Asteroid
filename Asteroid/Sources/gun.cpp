@@ -28,7 +28,7 @@ namespace Asteroid {
         if (t - lastFiredBulletAt < 1 / bulletsPerSecond) {
             return false;
         }
-        if (bullets.size() >= maxBullets) {
+        if ((unsigned int) bullets.size() >= maxBullets) {
             maxedOutAt = t;
             return false;
         }
@@ -43,21 +43,21 @@ namespace Asteroid {
 
     void Gun::step(double t, double dt) {
         std::vector<int> toDelete;
-        for (int i = 0; i < bullets.size(); i++) {
-            if (bullets[i]->startTime != 0 && t - bullets[i]->startTime >= bulletTimeToLive || !bullets[i]->alive) {
+        for (unsigned long i = 0; i < bullets.size(); i++) {
+            if ((bullets[i]->startTime != 0 && t - bullets[i]->startTime >= bulletTimeToLive) || !bullets[i]->alive) {
                 toDelete.insert(toDelete.begin(), i);
             } else {
                 bullets[i]->step(t, dt);
             }
         }
-        for (int i = 0; i < toDelete.size(); i++) {
+        for (unsigned long i = 0; i < toDelete.size(); i++) {
             delete bullets[toDelete[i]];
             bullets.erase(bullets.begin() + toDelete[i]);
         }
     }
 
     void Gun::draw() {
-        for (int i = 0; i < bullets.size(); i++) {
+        for (unsigned long i = 0; i < bullets.size(); i++) {
             bullets[i]->draw();
         }
     }

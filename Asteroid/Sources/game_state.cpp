@@ -124,7 +124,7 @@ namespace Asteroid {
         }
 
         toDelete.clear();
-        for (int i = 0; i < explosions.size(); i++) {
+        for (unsigned long i = 0; i < explosions.size(); i++) {
             auto explosion = explosions[i];
             if (explosion->alive) {
                 explosion->step(t, dt);

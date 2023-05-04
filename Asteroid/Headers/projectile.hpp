@@ -18,7 +18,7 @@ namespace Asteroid {
         Collider * coll;
         bool alive;
 
-        ~Projectile();
+        virtual ~Projectile();
         Projectile(float mass, float force, glm::vec2 pPos, glm::vec2 vel, glm::vec2 aim);
 
         void step(double t, double dt);

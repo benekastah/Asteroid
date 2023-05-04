@@ -21,7 +21,7 @@ namespace Asteroid {
         bool alive;
 
         Explosion(glm::vec2 mPos, glm::vec4 mColor, float mMass, float mDensity, double mTimeToLive);
-        ~Explosion();
+        virtual ~Explosion();
 
         void step(double t, double dt);
         void draw();
